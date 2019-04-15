@@ -7,22 +7,29 @@
     </p>
     <div class="topInfo">
       <span>省份</span>
-      <el-select v-model="province" size="mini" placeholder="全国">
-        <el-option
-          v-for="item in options1"
-          :key="item.value"
-          :label="item.province"
-          :value="item.province">
+      <el-select size="small" style="width: 100px"
+        v-model="selectProv"
+        placeholder="请选择省份"
+        v-on:change="getProv($event)">
+        <el-option v-for="(item,i) in provs"
+            :label="item.label"
+            :key="i"
+            :value="item.value">
         </el-option>
       </el-select>
+
       <span>城市</span>
-        <el-select v-model="city" size="mini" placeholder="深圳">
-        <el-option
-          v-for="item in options2"
-          :key="item.value"
-          :label="item.city"
-          :value="item.city">
-        </el-option>
+        <el-select size="small" style="width: 100px"
+            v-if="selectProv!=''"
+            v-model="selectCity"
+            placeholder="请选择城市"
+            v-on:change="getCity($event)">
+          <el-option
+            v-for="(item,j) in citys"
+            :key="j"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
       </el-select>
       <span>门店名称</span>
       <el-select
@@ -97,11 +104,15 @@
 <script>
 import CONSTANT from "../../constant/constant.js";
 let common = require("../../common.js");
+import PROVIN from '../../constant/city.js';
+import PROVIN2 from '../../constant/city2.js';
 export default {
   data() {
     return {
-      options1: [],
-      options2: [],
+      provs:PROVIN,
+      citys: [],
+      selectProv: '',
+      selectCity: '',
       input: '',
       address: '',
       province: '',
@@ -113,7 +124,6 @@ export default {
       value9: [],
       list: [],
       loading: false,
-      states: ["Alabama", "Alaska", "Arizona", "Arkansas"],
       tabelData: [],
       pageIndex: 1,
       pageSize: 10,
@@ -161,6 +171,23 @@ export default {
         console.log(newData);
       });
     },
+     /*二级联动选择地区*/
+    getProv: function (prov) {
+      let tempCity=[];             
+      this.citys=[];
+      this.selectCity=''; 
+      let allCity = PROVIN2;
+    for (var val of allCity){
+         if (prov == val.prov){
+           console.log(val);
+            tempCity.push({label: val.label, value: val.label})
+       }
+      }
+      this.citys = tempCity;
+    },
+    getCity(city) {
+      console.log(this.selectCity)
+     },       
     handleSizeChange(val) {
       this.pageSize = val;
       this.getList();

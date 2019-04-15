@@ -56,7 +56,7 @@
 import CONSTANT from "../../constant/constant.js";
 let common = require("../../common.js");
 import CITY from './city.js';
-import PROVINCE from './province.js';
+// import PROVINCE from './province.js';
 export default {
   data() {
     return{

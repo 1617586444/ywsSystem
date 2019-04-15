@@ -15,26 +15,32 @@
       <el-form-item prop="content">
       <div class="province" >
         <span>省份</span>
-        <el-select v-model="province" size="mini" placeholder="全国">
-          <el-option
-            v-for="item in options1"
-            :key="item.value"
+        <el-select size="small" style="width: 100px"
+        v-model="selectProv"
+        placeholder="请选择省份"
+        v-on:change="getProv($event)">
+        <el-option v-for="(item,i) in provs"
             :label="item.label"
+            :key="i"
             :value="item.value">
-          </el-option>
-        </el-select>
+        </el-option>
+      </el-select>
       </div>
       </el-form-item>
       <div class="city">
         <span>城市</span>
-        <el-select v-model="city" size="mini" placeholder="深圳">
+        <el-select size="small" style="width: 100px"
+            v-if="selectProv!=''"
+            v-model="selectCity"
+            placeholder="请选择城市"
+            v-on:change="getCity($event)">
           <el-option
-            v-for="item in options2"
-            :key="item.value"
+            v-for="(item,j) in citys"
+            :key="j"
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
+      </el-select>
       </div>
       <el-form-item >
       <div class="definiteAddress">
@@ -63,41 +69,15 @@
 <script>
 import CONSTANT from "../../constant/constant.js";
 let common = require("../../common.js");
+import PROVIN from '../../constant/city.js';
+import PROVIN2 from '../../constant/city2.js';
 export default {
   data() {
     return{
-      options1: [
-          {
-          value: '全国',
-          label: '全国'
-        },
-        {
-          value: '广东',
-          label: '广东'
-        },
-        {
-          value: '福建',
-          label: '福建'
-        }
-        ],
-      options2: [
-        {
-          value: '深圳',
-          label: '深圳'
-        },
-        {
-          value: '广州',
-          label: '广州'
-        },
-        {
-          value: '福州',
-          label: '福州'
-        },
-        {
-          value: '东莞',
-          label: '东莞'
-        }
-        ],
+        provs:PROVIN,
+        citys: [],
+        selectProv: '',
+        selectCity: '',
         input: '',
         address: '',
         city: '',
@@ -121,6 +101,23 @@ export default {
   created(){
     },
   methods:{
+     /*二级联动选择地区*/
+    getProv: function (prov) {
+      let tempCity=[];             
+      this.citys=[];
+      this.selectCity=''; 
+      let allCity = PROVIN2;
+    for (var val of allCity){
+         if (prov == val.prov){
+           console.log(val);
+            tempCity.push({label: val.label, value: val.label})
+       }
+      }
+      this.citys = tempCity;
+    },
+    getCity(city) {
+      console.log(this.selectCity)
+     }, 
     // 确定提交
     submitForm(){
       this.loading2 = true;
