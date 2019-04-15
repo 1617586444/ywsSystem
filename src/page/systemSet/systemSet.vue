@@ -36,7 +36,7 @@
           </el-upload>
         </div>
         <div class="linkto">
-          <el-input v-model="link" class="but" size="mini" placeholder="http://123123123123123132123"></el-input>
+          <el-input v-model="link" v-on:blur="handleVal" class="but" size="mini" placeholder="https://list.tmall.com/search_product.htm?q=%D2%C1%CE%AC%CB%B9&type=p&vmarket=&spm=875.7931836%2FB.a2227oh.d100&from=mallfp..pc_1_searchbutton"></el-input>
           <span>跳转链接</span>
         </div>
         <div class="contactMe">
@@ -44,15 +44,15 @@
           <div class="callInfo">
             <div class="hotCall">
               <span>全国统一客服热线：</span>
-              <el-input v-model="phone" class="but2" size="mini" placeholder="0755-45456748"></el-input>
+              <el-input v-model="phone" v-on:blur="handleHot" class="but2" size="mini" placeholder="0755-45456748"></el-input>
             </div>
             <div class="hotCall">
               <span>服务时间：</span>
-              <el-input v-model="time" class="but2" size="mini" placeholder="07:00-22:00"></el-input>
+              <el-input v-model="time" v-on:blur="handleTime" class="but2" size="mini" placeholder="07:00-22:00"></el-input>
             </div>
             <div class="hotCall">
               <span>公司地址：</span>
-              <el-input v-model="address" class="but2" size="mini" placeholder="广东省"></el-input>
+              <el-input v-model="address"  v-on:blur="handleAddress" class="but2" size="mini" placeholder="广东省"></el-input>
             </div>
           </div>
         </div>
@@ -221,8 +221,24 @@ let common = require("../../common.js");
     mounted(){
       // 获取列表数据
       this.getList()
+
+
     },
     methods: {
+      // 调用跳转链接
+      handleVal(){
+      this.setLinkInfo(this.link,'TMALL_LINK')
+      },
+      handleHot(){
+        this.setLinkInfo(this.phone,'CONTACT_PHONE')
+      },
+      handleTime(){
+        console.log('失去光标了');
+        this.setLinkInfo(this.time,'CONTACT_SERVICE')
+      },
+      handleAddress(){
+        this.setLinkInfo(this.address,'CONTACT_ADDRESS')
+      },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -249,271 +265,355 @@ let common = require("../../common.js");
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-   //首页二维码上传
-    beforeAvatarUpload(file) {
-      this.loading2 = true;
-      let url = CONSTANT.SYSTEM.ADMINUPLOADFILE + `/${file.name.split(".")[1]}`;
-      let sessionId = sessionStorage.getItem("sessionId");
-      $.ajax({
-        url: url,
-        method: "GET",
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId
-        }
-      }).success(res => {
-        console.log("得到图片key", res.data);
-        this.upLoadUrl = res.data.bussData.uploadUrl;
-        this.information.imageKey1 = res.data.bussData.fileKey;
-        let downloadUrl = res.data.bussData.downloadUrl;
-        common.uploadFile(this.upLoadUrl, file, file.type, res => {
-          console.log("上传完成");
-          this.imgUrl = downloadUrl;
-          this.loading2 = false;
-          let url2 = CONSTANT.SYSTEMSET.UPDATE;
-          let data = {
-            type:'INDEX_QRCODE',
-            value:this.imgUrl
+    //首页二维码上传
+      beforeAvatarUpload(file) {
+        this.loading2 = true;
+        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE + `/${file.name.split(".")[1]}`;
+        let sessionId = sessionStorage.getItem("sessionId");
+        $.ajax({
+          url: url,
+          method: "GET",
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId
           }
-          let param = JSON.stringify(data);
-          common.postNoSess(url2,param,null,res=>{
-            console.log(res);
-          })
+        }).success(res => {
+          console.log("得到图片key", res.data);
+          this.upLoadUrl = res.data.bussData.uploadUrl;
+          this.information.imageKey1 = res.data.bussData.fileKey;
+          let downloadUrl = res.data.bussData.downloadUrl;
+          common.uploadFile(this.upLoadUrl, file, file.type, res => {
+            console.log("上传完成");
+            this.imgUrl = downloadUrl;
+            this.loading2 = false;
+            let url2 = CONSTANT.SYSTEMSET.UPDATE;
+            let data = {
+              type:'INDEX_QRCODE',
+              value:this.information.imageKey1
+            }
+            let param = JSON.stringify(data);
+            common.postNoSess(url2,param,null,res=>{
+            })
+          });
         });
-      });
-    },
-   //天猫商城
-    beforeAvatarUpload2(file) {
-      this.loading2 = true;
-      let url = CONSTANT.SYSTEM.ADMINUPLOADFILE + `/${file.name.split(".")[1]}`;
-      let sessionId = sessionStorage.getItem("sessionId");
-      $.ajax({
-        url: url,
-        method: "GET",
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId
-        }
-      }).success(res => {
-        console.log("得到图片key2", res.data);
-        this.upLoadUrl = res.data.bussData.uploadUrl;
-        this.information.imageKey2 = res.data.bussData.fileKey;
-        let downloadUrl = res.data.bussData.downloadUrl;
-        common.uploadFile(this.upLoadUrl, file, file.type, res => {
-          console.log("上传");
+      },
+    //天猫商城
+      beforeAvatarUpload2(file) {
+        this.loading2 = true;
+        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE + `/${file.name.split(".")[1]}`;
+        let sessionId = sessionStorage.getItem("sessionId");
+        $.ajax({
+          url: url,
+          method: "GET",
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId
+          }
+        }).success(res => {
+          console.log("得到图片key2", res.data);
+          this.upLoadUrl = res.data.bussData.uploadUrl;
+          this.information.imageKey2 = res.data.bussData.fileKey;
+          let downloadUrl = res.data.bussData.downloadUrl;
+          common.uploadFile(this.upLoadUrl, file, file.type, res => {
+            console.log("上传");
+            this.imgUrl2 = downloadUrl;
+            this.loading2 = false;
+            let url3 = CONSTANT.SYSTEMSET.UPDATE;
+            let data = {
+              type:'TMALL_IMAGE',
+              value:this.information.imageKey2
+            }
+            let param = JSON.stringify(data);
+            common.postNoSess(url3,param,null,res=>{
+            })
+          });
+        });
+      },
+      // 首页视频展示省略图
+      beforeAvatarUpload3(file) {
+        this.loading2 = true;
+        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE + `/${file.name.split(".")[1]}`;
+        let sessionId = sessionStorage.getItem("sessionId");
+        $.ajax({
+          url: url,
+          method: "GET",
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId
+          }
+        }).success(res => {
+          console.log("得到图片key3", res.data);
+          this.upLoadUrl = res.data.bussData.uploadUrl;
+          this.information.imageKey3 = res.data.bussData.fileKey;
+          let downloadUrl = res.data.bussData.downloadUrl;
+          common.uploadFile(this.upLoadUrl, file, file.type, res => {
+            this.imgUrl3 = downloadUrl;
+            this.loading2 = false;
+            let url4 = CONSTANT.SYSTEMSET.UPDATE;
+            let data = {
+              type:'INDEX_IMAGE_VIDEO',
+              value:this.information.imageKey3
+            }
+            let param = JSON.stringify(data);
+            common.postNoSess(url4,param,null,res=>{
+            })
+          });
+        });
+      },
+      //  上传视频
+      beforeAvatarUpload4(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            console.log('得到视频key',res.data.bussData.fileKey);
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.videoKey = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                this.videoUrl = downloadUrl;
+                this.loading2 = false
+                let url5 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'INDEX_VIDEO',
+                  value:this.information.videoKey
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url5,param,null,res=>{
+                })
+            })
+          })
+      },
+      //  模块图片
+      beforeAvatarUpload5(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.imageKeyModel = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                this.imgUrlModel = downloadUrl;
+                this.loading2 = false
+                let url6 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'INDEX_IMAGE_PRODUCT',
+                  value:this.information.imageKeyModel
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url6,param,null,res=>{
+                })
+            })
+          })
+      },
+      //  模块图片
+      beforeAvatarUpload6(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            console.log('得到视频key',res.data.bussData.fileKey);
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.imageKeyModel2 = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                this.imgUrlModel2 = downloadUrl;
+                this.loading2 = false
+                let url7 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'INDEX_IMAGE_RESEARCH',
+                  value:this.information.imageKeyModel2
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url7,param,null,res=>{
+                })
+            })
+          })
+      },
+      //  模块图片
+      beforeAvatarUpload7(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            console.log('得到视频key',res.data.bussData.fileKey);
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.imageKeyModel3 = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                this.imgUrlModel3 = downloadUrl;
+                this.loading2 = false
+                let url8 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'INDEX_IMAGE_ABOUT',
+                  value:this.information.imageKeyModel3
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url8,param,null,res=>{
+                })
+            })
+          })
+      },
+      //  模块图片
+      beforeAvatarUpload8(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            console.log('得到视频key',res.data.bussData.fileKey);
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.imageKeyModel4 = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                this.imgUrlModel4 = downloadUrl;
+                this.loading2 = false
+                let url9 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'INDEX_IMAGE_VIP',
+                  value:this.information.imageKeyModel4
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url9,param,null,res=>{
+                })
+            })
+          })
+      },
+      //  模块图片
+      beforeAvatarUpload9(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            console.log('得到视频key',res.data.bussData.fileKey);
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.imageKeyModel5 = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                this.imgUrlModel5  = downloadUrl;
+                this.loading2 = false
+                let url10 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'INDEX_IMAGE_ART',
+                  value:this.information.imageKeyModel5
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url10,param,null,res=>{
+                })
+            })
+          })
+      },
+      // 门店置顶
+      beforeAvatarUpload10(file) {
+          this.loading2 = true
+          let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
+          let sessionId = sessionStorage.getItem('sessionId');
+          $.ajax({  url: url,  method: 'GET',
+          data: {
+            contentType: file.type
+          },
+          headers: {
+            sessionId: sessionId,
+          }}).success((res)=>{
+            console.log('得到视频key',res.data.bussData.fileKey);
+            this.upLoadUrl = res.data.bussData.uploadUrl;
+            this.information.imageKeyShop = res.data.bussData.fileKey;
+            let downloadUrl = res.data.bussData.downloadUrl;
+            common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                console.log('上传');
+                this.imgUrlShop = downloadUrl;
+                this.loading2 = false
+                let url11 = CONSTANT.SYSTEMSET.UPDATE;
+                let data = {
+                  type:'SHOP_IMAGE',
+                  value:this.information.imageKeyShop
+                }
+                let param = JSON.stringify(data);
+                common.postNoSess(url11,param,null,res=>{
+                })
+            })
+          })
+      },
+      //获取列表数据
+      getList() {
+        let url = CONSTANT.SYSTEMSET.PAGELIST;
+        common.postNoSess(url, null, null, res => {
           console.log(res);
-          this.imgUrl2 = downloadUrl;
-          this.loading2 = false;
+          let data = res.data;
+          this.time = data.bussData.contact.contactService;
+          this.link = data.bussData.tmallLink;
+          this.imgUrl2 = data.bussData.tmallImage;
+          this.imgUrl = data.bussData.indexQrcode;
+          this.imgUrl3 = data.bussData.indexImageVideo;
+          this.imgUrlModel = data.bussData.indexImageProduct;
+          this.imgUrlModel2 = data.bussData.indexImageResearch;
+          this.imgUrlModel3 = data.bussData.indexImageAbout;
+          this.imgUrlModel4 = data.bussData.indexImageVIP;
+          this.imgUrlModel5 = data.bussData.indexImageArt;
+          this.imgUrlShop = data.bussData.shopImage;
+          this.videoUrl = data.bussData.indexVideo;
+          this.address = data.bussData.contact.contactaddress;
+          this.phone = data.bussData.contact.contactPhone;
+
+          // for(var val of data.bussData.contact){
+          //   console.log(val);
+          // }
         });
-      });
-    },
-    // 首页视频展示省略图
-     beforeAvatarUpload3(file) {
-      this.loading2 = true;
-      let url = CONSTANT.SYSTEM.ADMINUPLOADFILE + `/${file.name.split(".")[1]}`;
-      let sessionId = sessionStorage.getItem("sessionId");
-      $.ajax({
-        url: url,
-        method: "GET",
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId
+      },
+      // 设置跳转链接
+      setLinkInfo(name,type){
+        let url = CONSTANT.SYSTEMSET.UPDATE;
+        let data = {
+          type:type,
+          value:name
         }
-      }).success(res => {
-        console.log("得到图片key3", res.data);
-        this.upLoadUrl = res.data.bussData.uploadUrl;
-        this.information.imageKey3 = res.data.bussData.fileKey;
-        let downloadUrl = res.data.bussData.downloadUrl;
-        common.uploadFile(this.upLoadUrl, file, file.type, res => {
-          console.log("上传");
+        let param = JSON.stringify(data);
+        common.postNoSess(url,param,null,res=>{
           console.log(res);
-          this.imgUrl3 = downloadUrl;
-          this.loading2 = false;
-        });
-      });
-     },
-    //  上传视频
-     beforeAvatarUpload4(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.videoKey = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.videoUrl = downloadUrl;
-              this.loading2 = false
-          })
         })
-     },
-    //  模块图片
-     beforeAvatarUpload5(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.imageKeyModel = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.imgUrlModel = downloadUrl;
-              this.loading2 = false
-          })
-        })
-     },
-    //  模块图片
-     beforeAvatarUpload6(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.imageKeyModel2 = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.imgUrlModel2 = downloadUrl;
-              this.loading2 = false
-          })
-        })
-     },
-    //  模块图片
-     beforeAvatarUpload7(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.imageKeyModel3 = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.imgUrlModel3 = downloadUrl;
-              this.loading2 = false
-          })
-        })
-     },
-    //  模块图片
-     beforeAvatarUpload8(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.imageKeyModel4 = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.imgUrlModel4 = downloadUrl;
-              this.loading2 = false
-          })
-        })
-     },
-     //  模块图片
-     beforeAvatarUpload9(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.imageKeyModel5 = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.imgUrlModel5  = downloadUrl;
-              this.loading2 = false
-          })
-        })
-     },
-     // 门店置顶
-     beforeAvatarUpload10(file) {
-        this.loading2 = true
-        let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
-        let sessionId = sessionStorage.getItem('sessionId');
-        $.ajax({  url: url,  method: 'GET',
-        data: {
-          contentType: file.type
-        },
-        headers: {
-          sessionId: sessionId,
-        }}).success((res)=>{
-          console.log('得到视频key',res.data.bussData.fileKey);
-          this.upLoadUrl = res.data.bussData.uploadUrl;
-          this.information.imageKeyShop = res.data.bussData.fileKey;
-          let downloadUrl = res.data.bussData.downloadUrl;
-          common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
-              console.log('上传');
-              this.imgUrlShop = downloadUrl;
-              this.loading2 = false
-          })
-        })
-     },
-    //获取列表数据
-    getList() {
-      let url = CONSTANT.SYSTEMSET.PAGELIST;
-      // let data = {
-      //   pageIndex:this.pageIndex,
-      //   pageSize: this.pageSize
-      // };
-      // let param=JSON.stringify(data)
-      common.postNoSess(url, null, null, res => {
-        console.log(res);
-        let data = res.data;
-        this.tabelData = data.bussData;
-        this.pageCount = data.pageCount * this.pageSize;
-      });
-    },
+      }
     }
   }
 </script>
