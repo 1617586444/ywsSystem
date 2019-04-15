@@ -32,24 +32,8 @@
           </el-option>
       </el-select>
       <span>门店名称</span>
-      <el-select
-        v-model="value9"
-        multiple
-        size="mini"
-        filterable
-        remote
-        reserve-keyword
-        placeholder
-        :loading="loading"
-      >
-        <el-option
-          v-for="item in options4"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-button size="mini">搜索</el-button>
+       <el-input v-model="search" @blur="noVal" class="but" size="mini" placeholder=""></el-input>
+      <el-button size="mini" @click="searchShopName">搜索</el-button>
       <el-button size="mini" @click="LinkToAddStore">添加门店</el-button>
     </div>
     <div class="main-buttom">
@@ -109,9 +93,10 @@ import PROVIN2 from '../../constant/city2.js';
 export default {
   data() {
     return {
-      provs:PROVIN,
+      provs:[],
       citys: [],
       selectProv: '',
+      search: '',
       selectCity: '',
       input: '',
       address: '',
@@ -127,14 +112,25 @@ export default {
       tabelData: [],
       pageIndex: 1,
       pageSize: 10,
-      pageCount: null
+      pageCount: null,
+      peivArr:[],
+      allCity:[],
     };
   },
   mounted() {
     this.getList();
-    console.log(CONSTANT.SHOP.PROVINCE);
   },
   methods: {
+    noVal(){
+      if(this.search == ''){
+      this.getList()
+
+      }
+    },
+    // 门店搜索
+    searchShopName(){
+       this.getList(this.search)
+    },
     handleClick(row) {
       this.$router.push("/storeEdit");
     },
@@ -142,12 +138,37 @@ export default {
       this.$router.push("/addNewsStore");
     },
     // 获取管理数据列表
-    getList() {
+    getList(name,priveName,cityName) {
       let url = CONSTANT.SHOP.PAGE;
-      let data = {
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize
-      };
+      let url2 = CONSTANT.SHOP.PROVINCESEARCH;
+      let data =null;
+      if(name){
+        data = {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize,
+          shopNameLike:this.search
+        };
+      } else{
+        data = {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize
+        };
+      }
+      if (priveName) {
+        data = {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize,
+          provinceLike:priveName
+        };
+      }
+      if (cityName) {
+        data = {
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize,
+          cityLike:cityName
+        };
+      }
+
       let pageParam = JSON.stringify(data);
       common.post(url, pageParam, null, res => {
         console.log(res);
@@ -168,25 +189,36 @@ export default {
           }
         })
         this.options2 = newData2;
-        console.log(newData);
+        common.post(url2, null, null, res => {
+          // {label:"北京市",value:"北京市"},
+          var newDate = res.data.bussData.map( item =>{
+            return{
+              label:item,
+              value:item
+            }
+          })
+           this.provs = newDate
+        });
       });
     },
      /*二级联动选择地区*/
-    getProv: function (prov) {
+    getProv(prov) {
       let tempCity=[];             
       this.citys=[];
       this.selectCity=''; 
-      let allCity = PROVIN2;
-    for (var val of allCity){
-         if (prov == val.prov){
-           console.log(val);
-            tempCity.push({label: val.label, value: val.label})
+      this.allCity = PROVIN2;
+    for (var val of this.allCity){
+      if (prov == val.prov){
+        tempCity.push({label: val.label, value: val.label})
        }
       }
       this.citys = tempCity;
+      console.log(this.selectProv);
+      this.getList(null,this.selectProv)
     },
     getCity(city) {
-      console.log(this.selectCity)
+    console.log(city);
+    this.getList(null,null,city)
      },       
     handleSizeChange(val) {
       this.pageSize = val;

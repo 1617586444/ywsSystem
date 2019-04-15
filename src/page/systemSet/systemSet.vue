@@ -269,10 +269,18 @@ let common = require("../../common.js");
         this.information.imageKey1 = res.data.bussData.fileKey;
         let downloadUrl = res.data.bussData.downloadUrl;
         common.uploadFile(this.upLoadUrl, file, file.type, res => {
-          console.log("上传");
-          console.log(res);
+          console.log("上传完成");
           this.imgUrl = downloadUrl;
           this.loading2 = false;
+          let url2 = CONSTANT.SYSTEMSET.UPDATE;
+          let data = {
+            type:'INDEX_QRCODE',
+            value:this.imgUrl
+          }
+          let param = JSON.stringify(data);
+          common.postNoSess(url2,param,null,res=>{
+            console.log(res);
+          })
         });
       });
     },

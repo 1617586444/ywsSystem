@@ -76,7 +76,7 @@ var CONSTANT = {
     FIND: api + 'shop/find_cities', //城市列表
     FINDSAERCH: api + 'shop/find_citise_by_search', //城市列表筛选
     PROVINCE: api + 'shop/find_provinces', //省份列表
-    PROVINCESEARCH: api + 'shop/find_provinces_by_search', //省份列表
+    PROVINCESEARCH: api + 'shop/find_shop_provinces', //省份列表
     PAGE: api + 'shop/page', //分页
     UPDATE: api + 'shop/update', //修改
     INSERT: api + 'shop/insert', //新增

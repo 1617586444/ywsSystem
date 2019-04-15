@@ -109,14 +109,15 @@ export default {
       let allCity = PROVIN2;
     for (var val of allCity){
          if (prov == val.prov){
-           console.log(val);
+          this.province = val.prov;
             tempCity.push({label: val.label, value: val.label})
        }
       }
       this.citys = tempCity;
     },
     getCity(city) {
-      console.log(this.selectCity)
+//       console.log(this.selectCity)
+      this.city = this.selectCity;
      }, 
     // 确定提交
     submitForm(){
