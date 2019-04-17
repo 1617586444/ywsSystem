@@ -37,6 +37,7 @@ const roleAdmin = resolve => require(['@/page/adminSet/roleAdmin'], resolve)
 const userAdmin = resolve => require(['@/page/adminSet/userAdmin'], resolve)
 const roleEdit = resolve => require(['@/page/adminSet/roleEdit'], resolve)
 const userEdit = resolve => require(['@/page/adminSet/userEdit'], resolve)
+const controller = resolve => require(['@/page/adminSet/controller'], resolve)
 
 
 Vue.use(Router)
@@ -174,6 +175,11 @@ export default new Router({
       path: '/userEdit',
       name: '/userEdit',
       component: userEdit
+    },
+    {
+      path: '/controller',
+      name: '/controller',
+      component: controller
     },
   ]
 })

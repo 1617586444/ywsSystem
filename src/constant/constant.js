@@ -10,6 +10,11 @@ var CONSTANT = {
   ADMIN: {
     LOGIN: api + 'manager/login',      //登录接口
     LOGINOUT: api + 'manager/logout',    // 登出接口
+    DELETE: api + 'manager/delete',    // 删除
+    DETAIL: api + 'manager/find_detail',    // 详情
+    PAGE: api + 'manager/find_page',    // 分页
+    INSERT: api + 'manager/insert',    // 新增
+    UPDATE: api + 'manager/update',    // 新增
     UPDUSERPWD: api + 'manager/reset_passowrd', //重置密码接口
     FINDUSERPERMISSIONS: api + 'user/findUserPermissions', //获取用户拥有的左侧菜单权限
   },
@@ -42,7 +47,7 @@ var CONSTANT = {
   },
   //依品管理
   PRODUCT: {
-    FINDPAGE: api + 'product/delete', // 删除
+    DELETE: api + 'product/delete', // 删除
     DETAIL: api + 'product/detail', //详情
     INSERT: api + 'product/insert', //新增
     PAGE: api + 'product/page', //分页
@@ -86,23 +91,23 @@ var CONSTANT = {
     PAGELIST: api + 'sys_var/index', //系统设置页面数据
     UPDATE: api + 'sys_var/update', // 修改
   },
-  //系统设置
-  // SYSTEMSET: {
-  //   PAGELIST: api + 'sys_var/index', //系统设置页面数据
-  //   UPDATE: api + 'sys_var/update', // 修改
-  // },
+
   // 权限接口
   AUTHOR: {
+    UPDATE: api + 'menu/update', //修改
+    DELETE: api + 'menu/delete', //删除
     INSERT: api + 'menu/insert', //新增
-    LIST: api + 'menu/list', //列表
+    DOWM: api + 'menu/shift_down', //下移
+    UP: api + 'menu/shift_up', //上移
+    GETLIST: api + 'menu/find_top_detail_list', //获取一级权限详情列表
   },
   //角色管理
   ROLE: {
-    INSERT: api + 'role/delete', // 删除
-    DETAIL: api + 'role/detail', // 详情
+    DELETE: api + 'role/delete', // 删除
+    DETAIL: api + 'role/find_detail', // 详情
     INSERT: api + 'role/insert', // 新增
-    LIST: api + 'role/list', // 列表
-    PAGE: api + 'role/page', // 分页
+    LIST: api + 'role/find_list', // 列表
+    PAGE: api + 'role/find_page', // 分页
     UPDATE: api + 'role/update', // 修改
   },
 

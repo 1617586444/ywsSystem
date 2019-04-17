@@ -28,6 +28,7 @@
             :minHeight="250"
             :uploadUrl="upLoadUrl"
             :content="information.content"
+            @editorData="editorInfo"
             >
           </bg-editor>
       </el-form-item>
@@ -83,7 +84,7 @@ export default {
           ],
         },
         information: {
-          content:'塑身功能内衣',
+          content:'',
           imageKey:'',
         },
         loading2:false,
@@ -103,6 +104,7 @@ export default {
   methods: {
     editorInfo(val){
       this.information.content = val;
+      console.log(val);
     },
     // 选择发生改变
     handleChange(){
@@ -130,6 +132,7 @@ export default {
         this.information.content = data.bussData.content;
         this.information.imageKey = data.bussData.imageKey;
         this.value = data.bussData.categoryName;
+        console.log(this.information.content);
       });
     },
     // 确定保存

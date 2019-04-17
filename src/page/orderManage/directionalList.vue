@@ -39,7 +39,7 @@
         <el-table-column fixed="right" prop="id" label="操作" >
           <template slot-scope="scope">
             <el-button type="primary" size="mini" class="origin" @click="linkToDetail(scope.row.id)">编辑</el-button>
-            <el-button type="text" @click="open2"><el-button
+            <el-button type="text" @click="open2(scope.row.id)"><el-button
               class="btn_size delet"
               type="warning"
               size="mini"
@@ -153,23 +153,35 @@ export default {
         console.log(this.value);
       });
     },
-    open2() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+    open2(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+      let url = CONSTANT.PRODUCT.DELETE+`?id=${id}`;
+        common.postNoSess(url, null, null, res => {
+          let data = res.data;
+          if(res.status == 'success') {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            // 重新加载页面
+            this.getList();
+          }
         });
-      }
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    }
   },
   filters: {}
 };

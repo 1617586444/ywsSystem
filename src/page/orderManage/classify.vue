@@ -132,6 +132,7 @@ export default {
     }).then(() => {
       let url = CONSTANT.CATEGORY.DELETE+`?id=${this.deleteId}`;
       common.postNoSess(url, null, null, res => {
+        console.log(res);
         let data = res.data;
         if(res.status == 'success') {
           this.$message({

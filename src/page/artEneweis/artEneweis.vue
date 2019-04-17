@@ -55,8 +55,8 @@ export default {
       common.postNoSess(url,null,null,(res)=>{
           this.loading = false;
           let data = res.data.bussData;
-          this.information.content = data;
           console.log(data);
+          this.information.content = data;
       });
       },
     editorInfo(val) {

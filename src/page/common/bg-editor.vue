@@ -36,6 +36,7 @@ export default {
     data(){
         return{
           loading:false,
+          fileKey:''
         }
     },
     props:{
@@ -85,9 +86,13 @@ export default {
                   sessionId: sessionId,
                 }
                 }).success((res)=>{
+                  console.log(res);
                   this.upLoadUrl = res.data.bussData.uploadUrl;
+                  let fileKey = res.data.bussData.fileKey;
+                   this.$emit('childEvent', { fileKey:fileKey});
                   let downloadUrl = res.data.bussData.downloadUrl;
                   common.uploadFile(this.upLoadUrl,file,file.type,(res)=>{
+                    console.log(res);
                     $('#summernote').summernote('editor.insertImage', downloadUrl);
                     this.loading = false;
                   })
@@ -103,6 +108,7 @@ export default {
         })
     },
     methods:{
+
     }
 }
 </script>

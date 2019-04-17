@@ -9,6 +9,7 @@
       <el-form :model="information" :rules="rules" ref="information" label-width="20px" class>
         <el-form-item label prop="content">
           <bg-editor
+            @childEvent="parentMethod"
             :minHeight="500"
             :uploadUrl="upLoadUrl"
             :content="information.content"
@@ -32,8 +33,10 @@ export default {
   data() {
     return {
       upLoadUrl: "",
+      fileKey: "",
+      parentMessage: '我是来自父组件的消息',
       information: {
-        content: ""
+        content: "",
       },
       type: "about",
       isShow: true,
@@ -49,6 +52,11 @@ export default {
     this.getDetail();
   },
   methods: {
+    parentMethod({fileKey}) {
+      console.log(fileKey);
+      console.log(this.parentMessage, fileKey);
+      this.fileKey = fileKey;
+    },
        // 获取数据
     getDetail(){
         this.loading = true;
@@ -75,6 +83,7 @@ export default {
           let url = CONSTANT.ARTINSRT.SETVAL;
           let data = {
               value:this.information.content,
+              // value:this.fileKey,
               type: this.type
           }
           let param = JSON.stringify(data);

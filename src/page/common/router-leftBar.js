@@ -155,6 +155,12 @@ export default {
           menuName: '用户管理',
           menuUrl: '/userAdmin',
           menuList:[],
+        },
+        {
+          id:'11-1',
+          menuName: '权限设置',
+          menuUrl: '/controller',
+          menuList:[],
         }
       ],
     }

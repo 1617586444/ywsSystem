@@ -1,5 +1,9 @@
 <template>
-  <div class="contain">
+  <div class="contain"
+  v-loading="loading"
+  element-loading-text="获取数据中..."
+  element-loading-spinner="el-icon-loading"
+  >
     <div class="main">
       <div height="60">图文详情：</div>
       <el-form :model="information" :rules="rules" ref="information" label-width="20px" class>
@@ -21,8 +25,8 @@
 </template>
 
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 import $ from "jquery";
 export default {
   data() {
@@ -33,20 +37,22 @@ export default {
       },
       type: "about",
       isShow: true,
-      rules: {},
+      rules: {
+        content:[
+            { required: true, message: '请输入内容', trigger: 'blur' },
+          ],
+      },
       loading: false,
-      url: "about"
+      url: "about",
+      loading:false
     };
   },
   components: {
     "bg-editor": () => import("../common/bg-editor.vue")
   },
-  // mounted() {
-  //   let sessionId = sessionStorage.getItem("sessionId");
-  //   this.upLoadUrl =
-  //     CONSTANT.URL.SYSTEM.ADMINUPLOADFILE + "?sessionId=" + sessionId;
-  //   this.getContent();
-  // },
+  mounted() {
+    this. getDetail()
+  },
   methods: {
     getContent() {
       let url = CONSTANT.SYSTEM.FINDSYSTEMINFO;
@@ -64,9 +70,18 @@ export default {
         }, this);
       });
     },
-    editorInfo(val) {
-      this.information.content = val;
+    // 获取数据
+    getDetail(){
+        this.loading = true;
+        let url = CONSTANT.VIPCENTER.FINDVAL;
+        common.postNoSess(url,null,null,(res)=>{
+          this.loading = false;
+          let data = res.data.bussData;
+          console.log(data);
+          this.information.content = data;
+      });
     },
+
     editForm() {
       this.isShow = false;
     },
@@ -109,10 +124,10 @@ export default {
           return false;
         }
       });
-    }
-    // handleClick() {
-    //     this.$router.push('/');
-    // },
+    },
+    editorInfo(val) {
+      this.information.content = val;
+    },
   }
 };
 </script>

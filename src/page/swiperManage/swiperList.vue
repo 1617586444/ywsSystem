@@ -6,7 +6,7 @@
       class="btn_position"
       type="primary"
       size="mini"
-       @click="linkToAdd('新增')"
+       @click="linkToDetail"
       >新增</el-button>
     </div>
     <div class="table-content">
@@ -119,14 +119,8 @@ export default {
       });
     },
     linkToDetail(info) {
-      console.log(info);
-      this.$router.push({ path: "/swiperDetail", query: { id: info.id,isDeleted:info.isDeleted } });
-      // let url = CONSTANT.SWIPERMANAGE.FINDLIST+`?id=${info.id}`;
-      // common.post(url,null,null,res=> {
-      //   console.log(res);
-      //   this.bannerLink = res.data.bussData.bannerLink;
-      //     // console.log(res.data.bussData.bannerLink);
-      // })
+      this.$router.push({ path: "/swiperDetail", query: { id: info.id,}});
+
     },
     linkToAdd(name){
        this.$router.push({ path: "/swiperAdd", query: { name: name } });
@@ -153,9 +147,6 @@ export default {
       let url = CONSTANT.SWIPERMANAGE.DELETE+`?id=${this.deleteId}`;
       common.postNoSess(url, null, null, res => {
         let data = res.data;
-        // console.log(res);
-        // this.tabelData = data.bussData;
-        // this.pageCount = data.pageCount * this.pageSize;
         if(res.status == 'success') {
           this.$message({
             type: 'success',
