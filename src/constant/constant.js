@@ -14,7 +14,7 @@ var CONSTANT = {
     DETAIL: api + 'manager/find_detail',    // 详情
     PAGE: api + 'manager/find_page',    // 分页
     INSERT: api + 'manager/insert',    // 新增
-    UPDATE: api + 'manager/update',    // 新增
+    UPDATE: api + 'manager/update',    // 修改
     UPDUSERPWD: api + 'manager/reset_passowrd', //重置密码接口
     FINDUSERPERMISSIONS: api + 'user/findUserPermissions', //获取用户拥有的左侧菜单权限
   },

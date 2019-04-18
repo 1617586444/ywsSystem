@@ -93,8 +93,8 @@
 </template>
 
 <script>
-import CONSTANT from '../../constant/constant.js';
-let common = require("../../common.js");
+import CONSTANT from '@/constant/constant.js';
+let common = require("@/common.js");
 export default {
   data() {
     return{
@@ -118,9 +118,9 @@ export default {
               roleList:[],
           },
       rules: {
-            roleId:[
-                    { required: true, message: '请选择角色类型', trigger: 'blur' },
-                ]
+          // roleId:[
+          //         { required: true, message: '请选择角色类型', trigger: 'blur' },
+          //     ]
             },
       provs:[],
       roleId:'',
@@ -147,7 +147,6 @@ export default {
       let pageParam = JSON.stringify(data);
       common.postNoSess(url, pageParam, null, res => {
         let data = res.data;
-        console.log(res);
         this.tableData = data.bussData;
         this.pageCount = data.pageCount * this.pageSize;
         var newUserName = data.bussData.map(item=>{
@@ -156,15 +155,16 @@ export default {
             id:item.id,
           }
         })
-        this.options1 = newUserName;
-        var newRoleName = data.bussData.map(value =>{
-                return{
-                  id:value.id,
-                  roleName:value.roleName,
-                }
-          })
-          // console.log(newRoleName);
-          this.provs = newRoleName;
+         let url = CONSTANT.ROLE.LIST;
+         common.postNoSess(url, null, null, res => {
+           var newData = res.data.bussData.map(item =>{
+             return{
+               id:item.id,
+               roleName:item.roleName
+             }
+           })
+          this.provs = newData;
+         })
       });
     },
     getProv(prov) {

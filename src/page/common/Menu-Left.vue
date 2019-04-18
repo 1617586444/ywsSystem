@@ -51,7 +51,6 @@ export default {
         let data = {};
         let param = JSON.stringify(data);
         common.post(url,param,null,(res)=>{
-          console.log(res.data.bussData.avatorLink);
             sessionStorage.setItem('avatorLink',res.data.bussData.avatorLink);
             this.routeList = res.data.bussData.menus;
             let active = '/'+ this.$router.currentRoute.path.split('/')[1];

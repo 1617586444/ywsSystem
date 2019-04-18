@@ -21,10 +21,10 @@
                     <el-input v-model="user.userName" placeholder="单行输入"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="passwd" >
-                    <el-input v-model="user.passwd" placeholder="新密码/重复新密码"></el-input>
+                    <el-input type="password" v-model="user.passwd" placeholder="新密码/重复新密码"></el-input>
                 </el-form-item>
                 <el-form-item label="重复密码" prop="confirmPasswd">
-                    <el-input v-model="user.confirmPasswd" placeholder="新密码/重复新密码"></el-input>
+                    <el-input type="password" v-model="user.confirmPasswd" placeholder="新密码/重复新密码"></el-input>
                 </el-form-item>
                 <el-form-item label="角色" prop="roleName">
                     <el-select filterable v-model='user.roleName'  @change="getRoleId" placeholder='-请选择-'>
@@ -34,10 +34,10 @@
                 </el-form-item>
                 <el-form-item  prop="roleName" v-if="show">
                     <el-select filterable v-model='user.roleName'  @change="getRoleId" placeholder='-请选择-'>
-                        <el-option   v-for="item in user.roleList"   :key="item.id"   :label="item.roleName"  :value="item.roleName"></el-option>
+                        <el-option   v-for="item in user.roleList"   :key="item.id"  :label="item.roleName"  :value="item.roleName"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item style="padding-left:100px">
                     <el-button type="primary"  @click="handleSave('user')">保存</el-button>
                     <el-button type="info" @click="backList">返回</el-button>
                 </el-form-item>
@@ -136,9 +136,8 @@ export default {
         getRoleList(){
             let url = CONSTANT.ADMIN.DETAIL+`?id=${this.id}`;
             common.postNoSess(url,null,null,(res)=>{
-              console.log(res);
+              // console.log(res);
                 let data = res.data.bussData;
-                let roleList = [];
                 this.user.userName = data.userName
                 this.user.loginName = data.loginName
                 this.user.roleId = data.roleId
@@ -149,11 +148,9 @@ export default {
          // 获取角色id
         getUserById(){
            let url = CONSTANT.ROLE.LIST;
-          //  let param = {userId:this.id} ;
-          // let param = JSON.stringify(data);
            common.postNoSess(url,null,null,(res)=>{
                 if(res.status == 'success'){
-                  console.log(res);
+                  // console.log(res);
                     let data = res.data.bussData;
                     var newSelectList = data.map(item=>{
                       return{
