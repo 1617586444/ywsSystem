@@ -145,7 +145,7 @@ export default {
         userNameLike: loginName==='' ? null : loginName,
       };
       let pageParam = JSON.stringify(data);
-      common.post(url, pageParam, null, res => {
+      common.postNoSess(url, pageParam, null, res => {
         let data = res.data;
         console.log(res);
         this.tableData = data.bussData;

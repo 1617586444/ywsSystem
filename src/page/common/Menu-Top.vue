@@ -1,10 +1,10 @@
 <template>
     <header>
         <el-col  class="left">伊维斯</el-col>
-        <el-col :span="18">欢迎Ailsa进入伊维斯管理平台！</el-col>
+        <el-col :span="18">欢迎{{manager}}进入伊维斯管理平台！</el-col>
         <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-                <img alt="Avatar" src="../../images/avatar.png">
+                <img alt="Avatar" :src="avatorLink">
                 <p class="manager">{{manager}}<img alt="Avatar" src="../../images/down.png" class="down"></p>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -21,6 +21,7 @@ export default {
         return {
             menuShow:false,
             manager:'',
+            avatorLink:'',
         }
     },
     created(){
@@ -32,6 +33,7 @@ export default {
     methods:{
         getManager(){
             this.manager = sessionStorage.getItem('manager')?sessionStorage.getItem('manager'):'管理员'
+            this.avatorLink = sessionStorage.getItem('avatorLink');
         },
         handleCommand(command){
             if(command == '1'){

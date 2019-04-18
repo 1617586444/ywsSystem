@@ -6,7 +6,7 @@
                     <!-- <i :class="menuItem.icon"></i> -->
                     <span>{{menuItem.menuName}}</span>
                 </template>
-                <el-menu-item  v-for="item in menuItem.childPermissions"  :key="item.menuName"  :index="item.menuUrl" >{{item.menuName}} </el-menu-item>
+                <el-menu-item  v-for="item in menuItem.subMenus"  :key="item.menuName"  :index="item.menuUrl" >{{item.menuName}} </el-menu-item>
                 <!-- <el-submenu v-for="item in menuItem.childPermissions" :key="item.id" :index="item.menuUrl"  v-if='item.length != 0 '>
                     <template slot="title">
                         <i></i>
@@ -21,14 +21,14 @@
 
 <script>
 import CONSTANT from "../../constant/constant.js";
-  let  common = require('../../common.js');
+let  common = require('../../common.js');
 var routerList = require('./router-leftBar.js');
 export default {
   data () {
     return {
         active:'',
-        // routeList:[],
-        routeList:routerList.default.routerList,
+        routeList:[],
+        // routeList:routerList.default.routerList,
         heightLength:''
     }
   },
@@ -36,7 +36,7 @@ export default {
       this.heightLength = document.body.scrollHeight ;
   },
   mounted(){
-        // this.leftPermission();
+        this.leftPermission();
         // this.fresh(1);
         window.addEventListener('scroll', ()=>{
             let scrollHeight = document.body.scrollHeight;
@@ -47,11 +47,13 @@ export default {
   },
   methods:{
     leftPermission(){
-        let url = CONSTANT.ADMIN.FINDUSERPERMISSIONS;
+        let url = CONSTANT.ADMIN.DETAIL;
         let data = {};
         let param = JSON.stringify(data);
         common.post(url,param,null,(res)=>{
-            this.routeList = res.data.bussData;
+          console.log(res.data.bussData.avatorLink);
+            sessionStorage.setItem('avatorLink',res.data.bussData.avatorLink);
+            this.routeList = res.data.bussData.menus;
             let active = '/'+ this.$router.currentRoute.path.split('/')[1];
             this.active = active;
         })

@@ -4,11 +4,11 @@ var Vue = require('vue');
 
 function post(url, param, dataForm = null, callBack, failBack = null) {
     let sessionId = sessionStorage.getItem('sessionId');
-    // let sendUrl = url + '?sessionId=' + sessionId;
+    let sendUrl = url + '?sessionId=' + sessionId;
     for (let item in dataForm) {
         sendUrl = sendUrl + "&" + item + '=' + dataForm[item];
     }
-    Vue.default.http.post(url, param, {headers:{'sessionId':sessionId}, emulateJSON: true, credentials: true }).then(res => {
+    Vue.default.http.post(sendUrl, param, {headers:{'sessionId':sessionId}, emulateJSON: true, credentials: true }).then(res => {
         callBack(res.data)
     }, res => {
         if (failBack) {

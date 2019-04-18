@@ -16,10 +16,9 @@
 </template>
 
 <script>
-import CONSTANT from "../../constant/constant.js";
-  let  common = require('../../common.js');
+import CONSTANT from "@/constant/constant.js";
+let  common = require('@/common.js');
 import Vue from 'vue'
-import $ from 'jquery'
 export default {
     name: 'login',
     data() {

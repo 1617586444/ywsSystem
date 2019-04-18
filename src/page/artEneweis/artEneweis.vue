@@ -10,6 +10,7 @@
         <el-form-item label prop="content">
           <bg-editor
             :minHeight="500"
+            :maxWidth="750"
             :uploadUrl="upLoadUrl"
             :content="information.content"
             @editorData="editorInfo"
@@ -24,9 +25,8 @@
 </template>
 
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
-import $ from "jquery";
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
@@ -34,36 +34,40 @@ export default {
       information: {
         content: ""
       },
-      type: "about",
-      isShow: true,
-      rules: {},
+      rules: {
+        content:[
+            { required: true, message: '请输入内容', trigger: 'blur' },
+          ],
+      },
       loading: false,
-      url: "about"
+      url: "",
     };
   },
   components: {
     "bg-editor": () => import("../common/bg-editor.vue")
   },
+  created(){
+    this.getDetail();
+    console.log(1);
+  },
   mounted() {
+    console.log(2);
     this.getDetail();
   },
   methods: {
-       // 获取数据
+    // 获取数据
     getDetail(){
         this.loading = true;
-      let url = CONSTANT.ART.FINDVAL;
-      common.postNoSess(url,null,null,(res)=>{
-          this.loading = false;
-          let data = res.data.bussData;
-          console.log(data);
-          this.information.content = data;
-      });
+        let url = CONSTANT.ART.FINDVAL;
+        common.postNoSess(url,null,null,(res)=>{
+            this.loading = false;
+            let data = res.data.bussData;
+            console.log(data);
+            this.information.content = data;
+        });
       },
     editorInfo(val) {
       this.information.content = val;
-    },
-    editForm() {
-      this.isShow = false;
     },
     // 确定保存
     submitForm(formName) {
@@ -84,9 +88,6 @@ export default {
                 message: "保存成功!"
               });
               this.loading = false;
-              setTimeout(() => {
-                // this.$router.push("/");
-              }, 2000);
             } else {
               this.$message({
                 type: "error",
@@ -96,7 +97,10 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
+          this.$message({
+            type: "error",
+            message: '错误的提交！！！'
+          });
           return false;
         }
       });
@@ -106,8 +110,6 @@ export default {
 </script>
 
 <style lang="scss" scoped >
-@import "/static/bootstrap.css";
-@import "/book/static/bootstrap.css";
 .contain {
   margin-top: 20px;
   .header {

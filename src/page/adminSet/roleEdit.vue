@@ -13,7 +13,7 @@
                 </el-form-item>
                 <el-form-item label="角色权限" prop="roleList">
                    <div class="access-list">
-                      <div  v-for="(item,index) in role.roleList" :key="item.id" class="access-item">
+                      <!-- <div  v-for="(item,index) in role.roleList" :key="item.id" class="access-item">
                         <template>
                           <el-checkbox v-model="item.checkAll" :indeterminate="item.isIndeterminate" @change="roleChange(index)"  :label="item.id" :key="item.id">{{item.menuName}}</el-checkbox>
                           <el-checkbox-group v-model="role.checkedOrder" style="margin-left: 20px;">
@@ -22,8 +22,18 @@
                             </el-checkbox>
 
                           </el-checkbox-group>
+
                         </template>
-                      </div>
+                      </div> -->
+                      <el-tree
+                      :data="roleDescribeLis"
+                      show-checkbox
+                      node-key="id"
+                      ref="tree"
+                      :default-checked-keys="checkedList"
+                      @check-change="fd"
+                      :props="defaultProps">
+                      </el-tree>
                   </div>
                 </el-form-item>
                 <el-form-item>
@@ -43,6 +53,7 @@ export default {
       return {
           id:'',
           idList:[],
+          checkedList:[],
           role: {
               roleList:[],
               roleName:'',
@@ -65,7 +76,11 @@ export default {
                   { type: 'array',  message: '请选择角色权限', required: true, trigger: 'change' }
               ]
           },
-
+        defaultProps: {
+          children: 'subMenus',
+          label: 'menuName'
+        },
+        roleDescribeLis:[],
       }
     },
     mounted() {
@@ -82,6 +97,7 @@ export default {
             this.$router.go(-1);
         },
         getDetailById(){
+          console.log('进来了');
             let url = CONSTANT.ROLE.DETAIL+`?id=${this.id}`;
             common.postNoSess(url,null,null,(res)=>{
               if(res.status == 'success'){
@@ -93,11 +109,16 @@ export default {
                       e = parseInt(e);
                         array.push(e);
                     });
-                    this.role.checkedOrder = array;
-                      console.log( this.role.checkedOrder);
+                    this.checkedList = array;
+                      console.log(  this.checkedList);
                     this.getList();
                 }
             })
+        },
+        fd(){
+            this.role.checkedOrder=this.$refs.tree.getCheckedKeys()
+            console.log(this.$refs.tree.getCheckedKeys());
+            console.log(this.role.checkedOrder);
         },
         getList(){
             let url = CONSTANT.AUTHOR.GETLIST;
@@ -119,15 +140,17 @@ export default {
                     item.isIndeterminate = num === item.subMenus.length?false:status;
                 })
                 this.role.roleList = data;
+                this.roleDescribeLis = data;
             })
         },
         handleSave(formName){
             this.$refs[formName].validate((valid) => {
+              // valid = true
                 if (valid) {
                     let url = null,
                     data,param;
-                    // this.role.checkedOrder = null;
-                    if(this.role.checkedOrder){
+                    if(this.id){
+                      //  this.role.checkedOrder = [];
                       console.log(this.role.checkedOrder);
                         url = CONSTANT.ROLE.UPDATE
                         this.role.checkedOrder.forEach((item)=>{
@@ -140,12 +163,12 @@ export default {
                             id:this.id
                         }
                     }else{
-                        this.role.checkedOrder = [];
+
                         url = CONSTANT.ROLE.INSERT;
                         param = {
                             roleName:this.role.roleName,
                             roleDesc:this.role.roleDescribe,
-                            menuIds:this.idList
+                            menuIds:this.role.checkedOrder
                         }
                     }
                     data = JSON.stringify(param);
@@ -173,7 +196,7 @@ export default {
             });
         },
         roleChange(index){
-            let arr = this.role.roleList[index].subMenus,
+            let arr = this.role.roleList[index].menuIds,
                 id = this.role.roleList[index].id;
                 this.idList.push(this.role.roleList[index].id);
                 console.log('第一层id',this.id);
@@ -199,7 +222,7 @@ export default {
                     }
                 })
         },
-        roleListChange:function(index,num){
+        roleListChange(index,num){
             let objArr = this.role.roleList[index].subMenus,
                  obj = objArr[num];
                  console.log('第二层',this.role.roleList[index],obj,objArr);

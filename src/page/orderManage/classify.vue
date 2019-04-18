@@ -52,32 +52,19 @@
   </div>
 </template>
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
       buyerId: "",
       orderId: "",
       productId: "",
-      sellerName: "",
       pageIndex: 1,
       pageSize: 10,
       pageCount: null,
       tabelData: [],
-      options: [
-          {
-          value: '1文胸',
-        },
-        {
-          value: '2泳装',
-        },
-        {
-          value: '3家居',
-        }
-        ],
-         value: '',
-         deleteId:'',
+      deleteId:'',
     };
   },
   mounted() {
@@ -123,31 +110,31 @@ export default {
     handleSelectionChange(val) {
     },
     open2(id) {
-    this.deleteId = id;
-    console.log(id);
-    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.deleteId = id;
+      console.log(id);
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
-    }).then(() => {
-      let url = CONSTANT.CATEGORY.DELETE+`?id=${this.deleteId}`;
-      common.postNoSess(url, null, null, res => {
-        console.log(res);
-        let data = res.data;
-        if(res.status == 'success') {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          // 重新加载页面
-          this.getList();
-        }
-      });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+      }).then(() => {
+        let url = CONSTANT.CATEGORY.DELETE+`?id=${this.deleteId}`;
+        common.postNoSess(url, null, null, res => {
+          console.log(res);
+          let data = res.data;
+          if(res.status == 'success') {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            // 重新加载页面
+            this.getList();
+          }
         });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
       });
     }
   },

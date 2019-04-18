@@ -184,7 +184,6 @@ export default {
                     if(this.id){
                       url = CONSTANT.ADMIN.UPDATE;
                         param = {
-                            userId:this.id,
                             loginName:this.user.loginName,
                             password:this.user.password,
                             userName:this.user.userName,
