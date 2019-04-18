@@ -36,7 +36,7 @@
             <img width="120" height="80" :src="scope.row.categoryImage2Link" alt="">
           </template>
         </el-table-column>
-        <el-table-column fixed="right" prop="id" label="操作" >
+        <el-table-column fixed="right" width="350" prop="id" label="操作" >
           <template slot-scope="scope">
             <el-button type="primary" size="mini" class="origin" @click="linkToDetail(scope.row.id)">编辑</el-button>
             <el-button type="text" @click="open2(scope.row.id)"><el-button
@@ -63,8 +63,8 @@
   </div>
 </template>
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
@@ -215,7 +215,7 @@ export default {
 }
 .addDetail{
   position: absolute;
-  top:220px;
+  top:190px;
   right:120px;
   z-index: 10;
 }

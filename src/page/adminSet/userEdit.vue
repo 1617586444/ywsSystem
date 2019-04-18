@@ -27,14 +27,14 @@
                     <el-input type="password" v-model="user.confirmPasswd" placeholder="新密码/重复新密码"></el-input>
                 </el-form-item>
                 <el-form-item label="角色" prop="roleName">
-                    <el-select filterable v-model='user.roleName'  @change="getRoleId" placeholder='-请选择-'>
-                        <el-option  v-for="item in user.roleList"   :key="item.id"   :label="item.roleName"  :value="item.id"></el-option>
+                    <el-select v-model='user.roleName'  @change="getRoleId" placeholder='-请选择-'>
+                        <el-option  v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
                     </el-select>
                 <i class="el-icon-circle-plus-outline" @click="show =!show"></i>
                 </el-form-item>
                 <el-form-item  prop="roleName" v-if="show">
-                    <el-select filterable v-model='user.roleName'  @change="getRoleId" placeholder='-请选择-'>
-                        <el-option   v-for="item in user.roleList"   :key="item.id"  :label="item.roleName"  :value="item.roleName"></el-option>
+                    <el-select v-model='user.roleName'  @change="getRoleId" placeholder='-请选择-'>
+                        <el-option   v-for="item in roleList"   :key="item.id"  :label="item.roleName"  :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item style="padding-left:100px">
@@ -50,183 +50,184 @@
 
 <script>
 import CONSTANT from "@/constant/constant.js";
-let common = require("../../common.js");
+let common = require("@/common.js");
 export default {
-    data() {
-        var validatePass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请再次输入密码'));
-            }
-            else if (value !== this.user.passwd) {
-                callback(new Error('两次输入密码不一致!'));
-            }
-            else {
-                callback();
-            }
-        };
-        var validateMobile = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入手机号码'));
-            }
-            else if (!(/^1[34578]\d{9}$/.test(value))) {
-                callback(new Error('手机号码不合法!'));
-            }
-            else {
-                callback();
-            }
-        };
-        return {
-            show:false,
-            upLoadUrl: "",
-            id:'',
-            bannerKey: '',
-            imgUrl: '',
-            user: {
-                userName:'',
-                passwd:'',
-                confirmPasswd:'',
-                loginName:'',
-                mobile:'',
-                roleName:'',
-                roleId:'11',
-                roleCode:0,
-                roleList:[],
-            },
-            pageUrlIndex:null,
-            rules: {
-                // iconImg: [
-                //     { required: true, message: '请上传图片', trigger: 'blur' }
-                // ],
-                userName: [
-                    { required: true, message: '请输入账号', trigger: 'blur' }
-                ],
-                confirmPasswd: [
-                    { required: true, message: '请确认密码', trigger: 'blur' },
-                    { min: 6, max:18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
-                ],
-                passwd: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
-                ],
-                userName2: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' },
-                    { validator: validateMobile, trigger: 'blur' }
-                ],
-                roleName:[
-                    { required: true, message: '请选择角色类型', trigger: 'blur' },
-                ]
-            },
+  data() {
+    var validatePass = (rule, value, callback) => {
+        if (value === '') {
+            callback(new Error('请再次输入密码'));
         }
-    },
-    mounted() {
-        this.id = this.$router.currentRoute.query.id;
-        this.pageUrlIndex = this.$router.currentRoute.query.pageIndex;
-        console.log(this.id);
-          this.getUserById();
-        if(this.id){
-          this.getRoleList();
+        else if (value !== this.user.passwd) {
+            callback(new Error('两次输入密码不一致!'));
         }
-    },
-    methods: {
-      // 返回
-        backList(){
-            this.$router.push('/userAdmin');
-        },
-        // 获取数据
-        getRoleList(){
-            let url = CONSTANT.ADMIN.DETAIL+`?id=${this.id}`;
-            common.postNoSess(url,null,null,(res)=>{
-              // console.log(res);
-                let data = res.data.bussData;
-                this.user.userName = data.userName
-                this.user.loginName = data.loginName
-                this.user.roleId = data.roleId
-                this.imgUrl = data.avatorLink;
-                this.bannerKey = data.avatorKey;
-            });
-        },
-         // 获取角色id
-        getUserById(){
-           let url = CONSTANT.ROLE.LIST;
-           common.postNoSess(url,null,null,(res)=>{
-                if(res.status == 'success'){
-                  // console.log(res);
-                    let data = res.data.bussData;
-                    var newSelectList = data.map(item=>{
-                      return{
-                        id:item.id,
-                        roleName:item.roleName
+        else {
+            callback();
+        }
+    };
+    var validateMobile = (rule, value, callback) => {
+        if (value === '') {
+            callback(new Error('请输入手机号码'));
+        }
+        else if (!(/^1[34578]\d{9}$/.test(value))) {
+            callback(new Error('手机号码不合法!'));
+        }
+        else {
+            callback();
+        }
+    };
+    return {
+      show:false,
+      upLoadUrl: "",
+      id:'',
+      bannerKey: '',
+      imgUrl: '',
+      user: {
+          userName:'',
+          passwd:'',
+          confirmPasswd:'',
+          loginName:'',
+          mobile:'',
+          roleName:'',
+          roleId:'11',
+          roleCode:0
+      },
+      pageUrlIndex:null,
+      rules: {
+          iconImg: [
+              { required: true, message: '请上传图片', trigger: 'blur' }
+          ],
+          userName: [
+              { required: true, message: '请输入账号', trigger: 'blur' }
+          ],
+          confirmPasswd: [
+              { required: true, message: '请确认密码', trigger: 'blur' },
+              { min: 6, max:18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+          ],
+          passwd: [
+              { required: true, message: '请输入密码', trigger: 'blur' },
+              { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          ],
+          userName2: [
+              { required: true, message: '请输入用户名', trigger: 'blur' },
+              { validator: validateMobile, trigger: 'blur' }
+          ],
+          roleName:[
+              { required: true, message: '请选择角色类型', trigger: 'blur' },
+          ]
+      },
+      roleList:[]
+    }
+  },
+  mounted() {
+      this.id = this.$router.currentRoute.query.id;
+      this.pageUrlIndex = this.$router.currentRoute.query.pageIndex;
+      console.log(this.id);
+        this.getUserById();
+      if(this.id){
+        this.getRoleList();
+      }
+  },
+  methods: {
+    // 返回
+      backList(){
+          this.$router.push('/userAdmin');
+      },
+      // 获取数据
+      getRoleList(){
+          let url = CONSTANT.ADMIN.DETAIL+`?id=${this.id}`;
+          common.postNoSess(url,null,null,(res)=>{
+            // console.log(res);
+              let data = res.data.bussData;
+              this.user=data;
+              this.imgUrl = data.avatorLink;
+              this.bannerKey = data.avatorKey;
+          });
+      },
+        // 获取角色id
+      getUserById(){
+          let url = CONSTANT.ROLE.LIST;
+          common.postNoSess(url,null,null,(res)=>{
+              if(res.status == 'success'){
+                console.log(res);
+                  let data = res.data.bussData;
+                  var newSelectList = data.map(item=>{
+                    return{
+                      id:item.id,
+                      roleName:item.roleName
+                    }
+                  })
+                  console.log(newSelectList);
+                  this.roleList = newSelectList;
+                  // this.user.trueName = data.trueName;
+                  // this.user.userName = data.userName;
+                  // this.user.mobile = data.mobile;
+                  // this.user.roleId = data.appRoleId;
+                  // this.user.roleName = data.roleName;
+              }
+          })
+      },
+      // 切换下拉角色
+      getRoleId(e){
+          this.user.roleId = e;
+          console.log(e);
+          this.getUserById()
+      },
+      handleSave(formName){
+          this.$refs[formName].validate((valid) => {
+              if (valid) {
+                  let url = null;
+                  let param;
+                    console.log(this.id); // 编辑
+                  if(this.id){
+                    // console.log(this.user.passwd);
+                    url = CONSTANT.ADMIN.UPDATE;
+                      param = {
+                          loginName:this.user.loginName,
+                          password:this.user.passwd,
+                          userName:this.user.userName,
+                          avatorKey:this.bannerKey,
+                          id:this.id
+                      };
+                  }
+                  else{
+                    url = CONSTANT.ADMIN.INSERT;
+                      param = {
+                          userName:this.user.userName,
+                          loginName:this.user.loginName,
+                          avatorKey:this.bannerKey,
+                          password:this.user.passwd,
+                          roleId:this.user.roleId
+                      };
+                  }
+                  let data = JSON.stringify(param);
+                  common.postNoSess(url,data,null,(res)=>{
+                    console.log(res);
+                      if(res.status == "success") {
+                          this.$message({
+                                  type: 'success',
+                                  message: '保存账户信息成功！'
+                              });
+                          this.$router.push("/userAdmin");
+                          if(!!this.pageUrlIndex){
+                              this.$router.push({name:'',params:{'pageIndex':this.pageUrlIndex}});
+                          }else{
+                              this.$router.push("/userAdmin");
+                          }
                       }
-                    })
-                    console.log(newSelectList);
-                    this.user.roleList = newSelectList;
-                    this.user.trueName = data.trueName;
-                    this.user.userName = data.userName;
-                    this.user.mobile = data.mobile;
-                    this.user.roleId = data.appRoleId;
-                    this.user.roleName = data.roleName;
-                }
-            })
-        },
-        getRoleId(e){
-            this.user.roleId = e;
-            console.log(e);
-        },
-        handleSave(formName){
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    let url = null;
-                    let param;
-                      console.log(this.id); // 编辑
-                    if(this.id){
-                      url = CONSTANT.ADMIN.UPDATE;
-                        param = {
-                            loginName:this.user.loginName,
-                            password:this.user.password,
-                            userName:this.user.userName,
-                            avatorKey:this.bannerKey,
-                            id:this.id
-                        };
-                    }
-                    else{
-                      url = CONSTANT.ADMIN.INSERT;
-                        param = {
-                            userName:this.user.userName,
-                            loginName:this.user.loginName,
-                            avatorKey:this.bannerKey,
-                            password:this.user.passwd,
-                            roleId:this.user.roleId
-                        };
-                    }
-                    let data = JSON.stringify(param);
-                    common.postNoSess(url,data,null,(res)=>{
-                      console.log(res);
-                        if(res.status == "success") {
-                            this.$message({
-                                    type: 'success',
-                                    message: '保存账户信息成功！'
-                                });
-                            this.$router.push("/userAdmin");
-                            if(!!this.pageUrlIndex){
-                                this.$router.push({name:'',params:{'pageIndex':this.pageUrlIndex}});
-                            }else{
-                                this.$router.push("/userAdmin");
-                            }
-                        }
-                        else{
-                            this.$message({
-                                type: 'warning',
-                                message: res.data.errMsg
-                            });
-                        }
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-    //轮播图片上传
+                      else{
+                          this.$message({
+                              type: 'warning',
+                              message: res.data.errMsg
+                          });
+                      }
+                  })
+              } else {
+                  console.log('error submit!!');
+                  return false;
+              }
+          });
+      },
+  //轮播图片上传
     beforeAvatarUpload2(file) {
       this.loading2 = true
       let url = CONSTANT.SYSTEM.ADMINUPLOADFILE+`/${file.name.split(".")[1]}`;
@@ -238,11 +239,11 @@ export default {
       headers: {
         sessionId: sessionId,
       }}).success((res) =>{
-         this.upLoadUrl = res.data.bussData.uploadUrl;
-         let downloadUrl =   res.data.bussData.downloadUrl;
-         console.log(res);
+          this.upLoadUrl = res.data.bussData.uploadUrl;
+          let downloadUrl =   res.data.bussData.downloadUrl;
+          console.log(res);
         //  将bannerkey保存
-         this.bannerKey = res.data.bussData.fileKey;
+          this.bannerKey = res.data.bussData.fileKey;
         common.uploadFile(this.upLoadUrl, file, file.type, res => {
             this.imgUrl = downloadUrl;
             // 图片预览加载成功
@@ -252,7 +253,7 @@ export default {
         console.log(error);
       })
     },
-    },
+  },
 
 }
 </script>

@@ -135,7 +135,7 @@ export default {
       },
       // 获取列表
     getList(roleId=null,userName=null,loginName=null) {
-      console.log(roleId,userName,loginName);
+      // console.log(roleId,userName,loginName);
       let url = CONSTANT.ADMIN.PAGE;
       let data = {
         pageIndex: this.pageIndex,

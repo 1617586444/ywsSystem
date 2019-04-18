@@ -5,15 +5,22 @@
   element-loading-spinner="el-icon-loading"
   >
     <div class="main">
-      <div height="60">图文详情：</div>
+      <div style="margin-bottom:60px">图文详情：</div>
       <el-form :model="information" :rules="rules" ref="information" label-width="20px" class>
         <el-form-item label prop="content">
-          <bg-editor
+          <!-- <bg-editor
             :minHeight="500"
             :uploadUrl="upLoadUrl"
             :content="information.content"
             @editorData="editorInfo"
-          ></bg-editor>
+          ></bg-editor> -->
+          <quill-editor
+            ref="myTextEditor"
+            :content="information.content"
+            :options="editorOption"
+            @change="onEditorChange($event)"
+            >
+          </quill-editor>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('information')" :loading="loading">保存</el-button>
@@ -25,13 +32,13 @@
 </template>
 
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
-import $ from "jquery";
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
       upLoadUrl: "",
+      editorOption:{},
       information: {
         content: "",
       },
@@ -42,13 +49,18 @@ export default {
       url: "about"
     };
   },
-  components: {
-    "bg-editor": () => import("../common/bg-editor.vue")
-  },
   created(){
     this. getDetail();
   },
   methods: {
+      onEditorBlur(e){//失去焦点事件
+      },
+      onEditorFocus(ele){//获得焦点事件
+      },
+      onEditorChange(e){//内容改变事件
+        this.information.content = e.html;
+        console.log(e.html);
+      },
       // 获取数据
       getDetail(){
          this.loading = true;
@@ -56,7 +68,7 @@ export default {
         common.postNoSess(url,null,null,(res)=>{
            this.loading = false;
             let data = res.data.bussData;
-            console.log(data);
+            // console.log(data);
             this.information.content = data;
         });
       },
@@ -131,9 +143,9 @@ export default {
     }
   }
   .main {
-    width: 500px;
+    width: 800px;
     max-width: 1500px;
-    margin: 20px 0 0 0px;
+    margin: 20px auto;
     clear: both;
     .modal-body {
       .note-image-input {

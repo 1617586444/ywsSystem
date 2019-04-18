@@ -5,19 +5,19 @@
   element-loading-spinner="el-icon-loading"
   >
     <div class="main">
-      <div height="60">图文详情：</div>
+      <div style="margin-bottom:60px">图文详情：</div>
       <el-form :model="information" :rules="rules" ref="information" label-width="20px" class>
         <el-form-item label prop="content">
-          <bg-editor
-            :minHeight="500"
-            :uploadUrl="upLoadUrl"
+          <quill-editor
+            ref="myTextEditor"
             :content="information.content"
-            @editorData="editorInfo"
-          ></bg-editor>
+            :options="editorOption"
+            @change="onEditorChange($event)"
+            >
+        </quill-editor>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('information')" :loading="loading">保存</el-button>
-          <!-- <el-button  type="primary" @click="handleClick"  :loading="loading">退出</el-button> -->
         </el-form-item>
       </el-form>
     </div>
@@ -27,49 +27,26 @@
 <script>
 import CONSTANT from "@/constant/constant.js";
 let common = require("@/common.js");
-import $ from "jquery";
 export default {
   data() {
     return {
       upLoadUrl: "",
+      editorOption:{},
       information: {
         content: ""
       },
-      type: "about",
-      isShow: true,
       rules: {
         content:[
             { required: true, message: '请输入内容', trigger: 'blur' },
           ],
       },
       loading: false,
-      url: "about",
-      loading:false
     };
-  },
-  components: {
-    "bg-editor": () => import("../common/bg-editor.vue")
   },
   mounted() {
     this. getDetail()
   },
   methods: {
-    getContent() {
-      let url = CONSTANT.SYSTEM.FINDSYSTEMINFO;
-      let data = {};
-      let param = JSON.stringify(data);
-      common.requestAjax(url, param, null, res => {
-        this.loading = false;
-        let data = res.data.bussData;
-        data.forEach(function(ele) {
-          // console.log(ele.type,this.type);
-          if (ele.type == this.type) {
-            this.information.content = ele.content;
-            // break;
-          }
-        }, this);
-      });
-    },
     // 获取数据
     getDetail(){
         this.loading = true;
@@ -77,14 +54,18 @@ export default {
         common.postNoSess(url,null,null,(res)=>{
           this.loading = false;
           let data = res.data.bussData;
-          console.log(data);
           this.information.content = data;
       });
     },
+      onEditorBlur(e){//失去焦点事件
+      },
+      onEditorFocus(ele){//获得焦点事件
+      },
+      onEditorChange(e){//内容改变事件
+        this.information.content = e.html;
+        console.log(e.html);
+      },
 
-    editForm() {
-      this.isShow = false;
-    },
     // 确定保存
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -133,8 +114,6 @@ export default {
 </script>
 
 <style lang="scss" scoped >
-@import "/static/bootstrap.css";
-@import "/book/static/bootstrap.css";
 .contain {
   margin-top: 20px;
   .header {
@@ -150,9 +129,9 @@ export default {
     }
   }
   .main {
-    width: 500px;
+    width: 800px;
     max-width: 1500px;
-    margin: 20px 0 0 0px;
+    margin: 20px auto;
     clear: both;
     .modal-body {
       .note-image-input {

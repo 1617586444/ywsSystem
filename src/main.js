@@ -18,6 +18,13 @@ import 'summernote/dist/lang/summernote-zh-CN.js'
 import 'summernote/dist/summernote.css'
 //import distpicker from 'distpicker'
 import VDistpicker from 'v-distpicker'
+
+import  VueQuillEditor from 'vue-quill-editor'
+// require styles 引入样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 Vue.component('v-distpicker', VDistpicker)
 
 Vue.use(VueResource);

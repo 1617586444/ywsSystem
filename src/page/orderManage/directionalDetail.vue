@@ -24,13 +24,13 @@
     <div class="productBigImg">
       <span class="sp3">图文详情</span>
        <el-form-item label="" prop="content" style="margin-top: 40px;">
-          <bg-editor
-            :minHeight="250"
-            :uploadUrl="upLoadUrl"
+          <quill-editor
+            ref="myTextEditor"
             :content="information.content"
-            @editorData="editorInfo"
+            :options="editorOption"
+            @change="onEditorChange($event)"
             >
-          </bg-editor>
+          </quill-editor>
       </el-form-item>
     </div>
     <div class="productSelet">
@@ -63,22 +63,23 @@
 </template>
 
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
       input: '',
       options: [],
+      editorOption:{},
         value: '',
         upLoadUrl:'',
         upLoadUrl1: '',
         imgUrl:'',
         value:'',
         rules: {
-        // content:[
-        //   { required: true, message: '请输入内容', trigger: 'blur' },
-        // ],
+        content:[
+          { required: true, message: '请输入内容', trigger: 'blur' },
+        ],
         imageKey:[
               { required: true, message: '请上传图片', trigger: 'blur' },
           ],
@@ -91,9 +92,6 @@ export default {
         categoryId:'',
     }
   },
-  components:{
-    'bg-editor':()=>import('../common/bg-editor.vue')
-  },
   mounted(){
     this.handleChange()
     this.id = this.$router.currentRoute.query.id;
@@ -102,17 +100,20 @@ export default {
     }
   },
   methods: {
-    editorInfo(val){
-      this.information.content = val;
-      console.log(val);
-    },
+     onEditorBlur(e){//失去焦点事件
+      },
+      onEditorFocus(ele){//获得焦点事件
+      },
+      onEditorChange(e){//内容改变事件
+        this.information.content = e.html;
+        console.log(e.html);
+      },
     // 选择发生改变
     handleChange(){
-       let url = CONSTANT.CATEGORY.LIST;
-      common.postNoSess(url, null, null, res => {
+        let url = CONSTANT.CATEGORY.LIST;
+        common.postNoSess(url, null, null, res => {
         let data = res.data;
-
-      var newData = data.bussData.map(item =>{
+        var newData = data.bussData.map(item =>{
               return {
                 name:item.name,
                 id:item.id
@@ -216,7 +217,6 @@ export default {
 </script>
 
 <style scoped>
-@import '/sys/static/bootstrap.css';
   .storeAdmin{
     height:100%;
     width:100%;
