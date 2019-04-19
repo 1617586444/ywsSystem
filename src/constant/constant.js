@@ -26,6 +26,8 @@ var CONSTANT = {
     UPDATE: api + 'banner/update', //编辑
     PAGE: api + 'banner/page', // 分页
     DELETE: api + 'banner/delete', // 删除
+    UP: api + 'banner/shift_up', // 上移
+    DOWM: api + 'banner/shift_down', // 下移
   },
   // 依享潮流
   PRODUCTMANAGE: {

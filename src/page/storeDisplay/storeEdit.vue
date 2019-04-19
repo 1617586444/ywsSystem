@@ -3,7 +3,7 @@
     <p class="pageSwiper">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/storeDisplay' }">门店形象</el-breadcrumb-item>
-        <el-breadcrumb-item><a href="/">添加新门店</a></el-breadcrumb-item>
+        <el-breadcrumb-item><a href="/">编辑新门店</a></el-breadcrumb-item>
       </el-breadcrumb>
     </p>
     <el-form :model="information" :rules="rules" ref="information" >
@@ -25,7 +25,6 @@
        <div class="city">
         <span>城市</span>
         <el-select size="small" style="width: 100px"
-            v-if="selectProv!=''"
             v-model="selectCity"
             placeholder="请选择城市"
             v-on:change="getCity($event)">
@@ -93,6 +92,7 @@ export default {
     this.id = this.$router.currentRoute.query.id;
     if (this.id) {
       this.getList();
+      console.log(this.selectProv);
     }
   },
   methods:{
@@ -101,10 +101,11 @@ export default {
       let url = CONSTANT.SHOP.DETAIL + `?id=${this.id}`;
       common.postNoSess(url, null, null, res => {
         let data = res.data;
+        console.log(data);
         this.address = data.bussData.address;
-        this.city = data.bussData.city;
         this.selectCity = data.bussData.city;
-        this.province = data.bussData.province;
+        // this.city = data.bussData.city;
+        // this.province = data.bussData.province;
         this.selectProv = data.bussData.province;
         this.phone = data.bussData.phone;
         this.shopName = data.bussData.shopName;
@@ -130,9 +131,6 @@ export default {
             province: this.province,
             shopName: this.shopName,
           };
-          if (this.id) {
-            data.id = this.id;
-          }
           let param = JSON.stringify(data);
           common.postNoSess(url, param, null, res => {
             console.log("提交的结果", res);
@@ -144,7 +142,7 @@ export default {
               this.loading = false;
               setTimeout(() => {
                 this.$router.push("/storeDisplay");
-              }, 2000);
+              }, 1000);
             } else {
               this.$message({
                 type: "error",
@@ -160,22 +158,22 @@ export default {
       });
     },
      /*二级联动选择地区*/
-    getProv (prov) {
-      let tempCity=[];             
-      this.citys=[];
-      this.selectCity=''; 
-      let allCity = PROVIN2;
-      for (var val of allCity){
-           if (prov == val.prov){
-            // 省份接口
-            this.province = val.prov;
-              tempCity.push({label: val.label, value: val.label})
-         }
-      }
-      this.citys = tempCity;
-    },
-    getCity(city) {
-//       console.log(this.selectCity)
+    //  选择省份触发
+    getProv (prov) {
+      this.citys=[];
+      this.selectCity=''; 
+      for (var val of PROVIN2){
+        if (prov == val.prov){
+         // 省份接口
+        this.province = val.prov;
+        this.citys.push({label: val.label, value: val.label})
+        }
+      }
+        console.log(this.citys);
+   },
+    // 选择城市触发
+    getCity(city) {
+      console.log(this.selectCity)
       this.city = this.selectCity;
      }, 
   },

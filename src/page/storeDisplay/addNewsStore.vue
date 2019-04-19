@@ -30,7 +30,7 @@
       <div class="city">
         <span>城市</span>
         <el-select size="small" style="width: 100px"
-            v-if="selectProv!=''"
+            :disabled="selectProv ? false : true"
             v-model="selectCity"
             placeholder="请选择城市"
             v-on:change="getCity($event)">
@@ -145,7 +145,6 @@ export default {
               this.$router.push('/storeDisplay')
             },1500)
             this.loading2 = false;
-            this.getContent();
         } else {
             this.$message({
                 type: 'error',

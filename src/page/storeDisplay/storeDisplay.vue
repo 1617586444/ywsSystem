@@ -1,6 +1,6 @@
 <template>
   <div class="storeDisplay">
-    <p class="pageSwiper">
+    <p class="pageSwiper" heght="60">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/storeDisplay' }">/&nbsp;门店形象&nbsp;/</el-breadcrumb-item>
       </el-breadcrumb>
@@ -20,7 +20,7 @@
 
       <span>城市</span>
         <el-select size="small" style="width: 100px"
-            v-if="selectProv!=''"
+            :disabled="selectProv ? false : true"
             v-model="selectCity"
             placeholder="请选择城市"
             v-on:change="getCity($event)">
@@ -31,8 +31,9 @@
             :value="item.value">
           </el-option>
       </el-select>
+      <br>
       <span>门店名称</span>
-       <el-input v-model="search" @blur="noVal" class="but" size="mini" placeholder=""></el-input>
+       <el-input v-model="search" @blur="noVal" size="mini" placeholder=""></el-input>
       <el-button size="mini" @click="searchShopName">搜索</el-button>
       <el-button size="mini" @click="LinkToAddStore">添加门店</el-button>
     </div>
@@ -90,6 +91,7 @@ import CONSTANT from "../../constant/constant.js";
 let common = require("../../common.js");
 import PROVIN from '../../constant/city.js';
 import PROVIN2 from '../../constant/city2.js';
+import $ from 'jquery';
 export default {
   data() {
     return {
@@ -171,7 +173,7 @@ export default {
 
       let pageParam = JSON.stringify(data);
       common.post(url, pageParam, null, res => {
-        console.log(res);
+        // console.log(res);
         let data = res.data;
         this.tabelData = data.bussData;
         this.pageCount = data.pageCount * this.pageSize;
@@ -197,7 +199,9 @@ export default {
               value:item
             }
           })
-           this.provs = newDate
+          // console.log(newDate);
+           newDate.unshift({label:'所有',value:'所有'});
+           this.provs = newDate;
         });
       });
     },
@@ -207,14 +211,18 @@ export default {
       this.citys=[];
       this.selectCity=''; 
       this.allCity = PROVIN2;
-    for (var val of this.allCity){
+      for (var val of this.allCity){
       if (prov == val.prov){
         tempCity.push({label: val.label, value: val.label})
        }
       }
       this.citys = tempCity;
-      console.log(this.selectProv);
-      this.getList(null,this.selectProv)
+      // console.log(this.selectProv);
+      if(this.selectProv == '所有'){
+        this.getList(null,null,null)
+      }else{
+        this.getList(null,this.selectProv)
+      }
     },
     getCity(city) {
     console.log(city);
@@ -273,12 +281,12 @@ export default {
   height: 28px !important;
 }
 .pageSwiper {
-  padding-top: 0;
+  padding-top: 20px;
   padding-left: 10px;
 }
 .topInfo {
-  height: 60px;
-  line-height: 60px;
+  height: 120px;
+  line-height: 50px;
   border: 1px solid rgba(187, 187, 187, 1);
 }
 .topInfo > span {

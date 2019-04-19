@@ -2,7 +2,7 @@
   <div class="contain">
     <div class="input_modal">
       <span>分类名</span>
-      <el-select @change="handleChange" v-model="value" placeholder="文胸 breo">
+      <el-select @change="handleChange" v-model="value" placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.id"
@@ -81,19 +81,9 @@ export default {
       pageSize: 10,
       pageCount: null,
       tabelData: [],
-      options: [
-          {
-          value: '1文胸',
-        },
-        {
-          value: '2泳装',
-        },
-        {
-          value: '3家居',
-        }
-        ],
-      value: '14',
-      categoryId: '14',
+      options: [],
+      value: '',
+      categoryId: '',
     };
   },
   mounted() {
@@ -142,6 +132,7 @@ export default {
        let url = CONSTANT.CATEGORY.LIST;
       common.postNoSess(url, null, null, res => {
         let data = res.data;
+        console.log(res);
       var newData = data.bussData.map(item =>{
               return {
                 name:item.name,
@@ -199,10 +190,7 @@ export default {
 .delet{
   background:#FC7982 100%;
 }
-.input_modal{
-  height: 50px;
-  line-height: 20px;
-}
+
 .export {
   width: 80px;
   height: 36px;

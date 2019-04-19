@@ -4,11 +4,13 @@
     element-loading-text="拼命上传中..."
     element-loading-spinner="el-icon-loading"
   >
+    <el-form :model="information" :rules="rules" ref="information" label-width="120px" class="">
     <div class="productName">
       <span class="sp1">商品名称：</span>
-      <el-input class="put" v-model="input" placeholder="请输入"></el-input>
+      <el-form-item prop="input">
+       <el-input class="put" v-model="information.input" placeholder="请输入"></el-input>
+      </el-form-item>
     </div>
-    <el-form :model="information" :rules="rules" ref="information" label-width="120px" class="">
     <div class="productImg">
      <span class="sp2">配图</span>
      <el-form-item prop="imageKey">
@@ -34,8 +36,9 @@
       </el-form-item>
     </div>
     <div class="productSelet">
+      <el-form-item prop="value">
       <span class="sp4">商品所属分类</span>
-      <el-select @change="handleChange" v-model="value" placeholder="文胸">
+      <el-select @change="handleChange" v-model="information.value" placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.id"
@@ -44,6 +47,7 @@
           >
         </el-option>
      </el-select>
+      </el-form-item>
     </div>
     <div class="buttons">
       <el-button class="but" size="mini" type="primary"
@@ -57,8 +61,8 @@
       返回
       </el-button>
     </div>
-    </el-form>
     <div class="yuan"></div>
+    </el-form>
   </div>
 </template>
 
@@ -71,25 +75,32 @@ export default {
       input: '',
       options: [],
       editorOption:{},
-        value: '',
-        upLoadUrl:'',
-        upLoadUrl1: '',
-        imgUrl:'',
-        value:'',
-        rules: {
-        content:[
-          { required: true, message: '请输入内容', trigger: 'blur' },
+      upLoadUrl:'',
+      upLoadUrl1: '',
+      imgUrl:'',
+      rules: {
+      content:[
+        { required: true, message: '请输入内容', trigger: 'blur' },
+      ],
+      input:[
+        { required: true, message: '请输入商品名称', trigger: 'blur' },
+      ],
+      imageKey:[
+            { required: true, message: '请上传图片', trigger: 'blur' },
         ],
-        imageKey:[
-              { required: true, message: '请上传图片', trigger: 'blur' },
-          ],
-        },
-        information: {
-          content:'',
-          imageKey:'',
-        },
-        loading2:false,
-        categoryId:'',
+      value:[
+            { required: true, message: '请选择分类', trigger: 'blur' },
+        ],
+      },
+      information: {
+        value: '',
+        content:'',
+        imageKey:'',
+        input:'',
+      },
+      loading2:false,
+      categoryId:'',
+      id:'',
     }
   },
   mounted(){
@@ -119,6 +130,7 @@ export default {
                 id:item.id
               }
         })
+        // console.log(newData);
         this.options = newData;
       });
     },
@@ -128,12 +140,13 @@ export default {
       common.postNoSess(url, null, null, res => {
         let data = res.data;
         console.log(data.bussData);
-        this.input = data.bussData.name;
+        this.information.input = data.bussData.name;
         this.imgUrl = data.bussData.categoryImage2Link;
         this.information.content = data.bussData.content;
         this.information.imageKey = data.bussData.imageKey;
-        this.value = data.bussData.categoryName;
-        console.log(this.information.content);
+        this.information.value = data.bussData.categoryName;
+        this.categoryId = data.bussData.categoryId;
+        // console.log(this.information.content);
       });
     },
     // 确定保存
@@ -145,22 +158,23 @@ export default {
           this.loading = true;
           let url = '';
           if(this.id){url = CONSTANT.PRODUCT.UPDATE;
+
              data = {
-              categoryId: this.id,
+              categoryId: this.categoryId,
               content:this.information.content,
               imageKey:this.information.imageKey,
-              name:this.input,
+              name:this.information.input,
               id:this.id
            };
           }else{url = CONSTANT.PRODUCT.INSERT;
             data = {
-                categoryId: this.value,
+                categoryId: this.information.value,
                 content:this.information.content,
                 imageKey:this.information.imageKey,
-                name:this.input,
+                name:this.information.input,
             };
           }
-          if(this.id){ data.id = this.id};
+          // if(this.id){ data.id = this.id};
           let param = JSON.stringify(data);
           common.postNoSess(url, param, null, res => {
             console.log('提交的结果',res);
@@ -170,9 +184,7 @@ export default {
                       message: '保存成功!'
                   });
                   this.loading = false;
-                  setTimeout(() => {
-                    this.$router.push("/directionalList");
-                  }, 2000);
+                  this.$router.push("/directionalList");
               } else {
                   this.$message({
                       type: 'error',

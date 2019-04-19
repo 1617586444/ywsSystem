@@ -1,5 +1,9 @@
 <template>
-  <div class="contain">
+  <div class="contain"
+  v-loading="loading2"
+    element-loading-text="玩命加载中..."
+    element-loading-spinner="el-icon-loading"
+  >
     <div class="table-content">
       <el-button type="primary" size="mini" class="addDetail1" @click="linkToDetail()">新增</el-button>
       <el-table
@@ -65,6 +69,7 @@ export default {
       pageCount: null,
       tabelData: [],
       deleteId:'',
+      loading2: true
     };
   },
   mounted() {
@@ -81,6 +86,7 @@ export default {
       let pageParam = JSON.stringify(data);
       common.post(url, pageParam, null, res => {
         let data = res.data;
+        this.loading2 = false;
         console.log(res);
         this.tabelData = data.bussData;
         this.pageCount = data.pageCount * this.pageSize;
@@ -128,6 +134,11 @@ export default {
             });
             // 重新加载页面
             this.getList();
+          }else{
+             this.$message({
+            type: 'info',
+            message: '该商品已经被管理页面引用。请先删除管理页面数据！'
+          });
           }
         });
         }).catch(() => {

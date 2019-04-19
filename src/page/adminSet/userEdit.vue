@@ -5,7 +5,7 @@
        </div>
        <div class="main">
            <el-form :model="user" :rules="rules" ref="user" label-width="120px" class="">
-                <el-form-item label="头像" prop="iconImg">
+                <el-form-item label="头像" prop="bannerKey">
                   <el-upload class="avatar-uploader"
                     :action="upLoadUrl"
                     :show-file-list="false"
@@ -89,13 +89,13 @@ export default {
           mobile:'',
           roleName:'',
           roleId:'11',
-          roleCode:0
+          roleCode:0,
       },
       pageUrlIndex:null,
       rules: {
-          iconImg: [
-              { required: true, message: '请上传图片', trigger: 'blur' }
-          ],
+          // bannerKey: [
+          //     { required: true, message: '请上传图片', trigger: 'blur' }
+          // ],
           userName: [
               { required: true, message: '请输入账号', trigger: 'blur' }
           ],

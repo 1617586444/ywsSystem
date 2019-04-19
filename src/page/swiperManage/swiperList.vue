@@ -53,7 +53,14 @@
               type="warning"
               size="mini"
               @click="showUpdata(scope.row.id)"
-            > {{scope.row.enable ? '显示' : '隐藏'}}</el-button>
+            > {{scope.row.enable ? '隐藏' : '显示'}}</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="移动" fixed="right" width="100px">
+          <template slot-scope="scope">
+            <i class="el-icon-upload2" @click="upLoad(scope.row.id)" style="font-size:30px"></i>
+          <i class="el-icon-download"  @click="download(scope.row.id)"
+          style="font-size:30px"></i>
           </template>
         </el-table-column>
       </el-table>
@@ -73,8 +80,8 @@
   </div>
 </template>
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
@@ -93,6 +100,38 @@ export default {
     this.getList();
   },
   methods: {
+    // 上移
+    upLoad(id){
+      console.log('上移',id);
+      let url = CONSTANT.SWIPERMANAGE.UP+`?id=${id}`;
+      common.postNoSess(url, null, null, res => {
+        console.log(res);
+        if(res.status == 'success') {
+          this.$message({
+            type: 'success',
+            message: '上移成功!'
+          });
+          // 重新加载页面
+          this.getList();
+        }
+      });
+    },
+    // 下移
+    download(id){
+      console.log('下',id);
+      let url = CONSTANT.SWIPERMANAGE.DOWM+`?id=${id}`;
+      common.postNoSess(url, null, null, res => {
+        console.log(res);
+        if(res.status == 'success') {
+          this.$message({
+            type: 'success',
+            message: '下移成功!'
+          });
+          // 重新加载页面
+          this.getList();
+        }
+      });
+    },
     //获取banner列表数据
     getList() {
       let url = CONSTANT.SWIPERMANAGE.PAGE;
@@ -173,6 +212,9 @@ export default {
 <style lang="scss" scoped>
 .contain .table-content {
   text-align: center !important;
+}
+i{
+  cursor: pointer;
 }
 .contain {
   .btn_size {

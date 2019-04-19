@@ -147,6 +147,7 @@ export default {
       let pageParam = JSON.stringify(data);
       common.postNoSess(url, pageParam, null, res => {
         let data = res.data;
+        console.log(data);
         this.tableData = data.bussData;
         this.pageCount = data.pageCount * this.pageSize;
         var newUserName = data.bussData.map(item=>{
@@ -157,6 +158,7 @@ export default {
         })
          let url = CONSTANT.ROLE.LIST;
          common.postNoSess(url, null, null, res => {
+           console.log(res);
            var newData = res.data.bussData.map(item =>{
              return{
                id:item.id,

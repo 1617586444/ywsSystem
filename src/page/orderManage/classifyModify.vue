@@ -2,14 +2,14 @@
   <div
     class="classifyModf"
     v-loading="loading2"
-    element-loading-text="拼命上传中..."
+    element-loading-text="玩命加载中..."
     element-loading-spinner="el-icon-loading"
   >
     <el-form :model="information" :rules="rules" ref="information" label-width="120px" class>
-      <el-form-item prop="name">
+      <el-form-item prop="input">
         <div class="title">
           <span>标题</span>
-          <el-input class="put" v-model="input" placeholder="hahh"></el-input>
+          <el-input class="put" v-model="information.input" placeholder="请输入标题"></el-input>
         </div>
       </el-form-item>
 
@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import CONSTANT from "../../constant/constant.js";
-let common = require("../../common.js");
+import CONSTANT from "@/constant/constant.js";
+let common = require("@/common.js");
 export default {
   data() {
     return {
@@ -64,15 +64,18 @@ export default {
       id: "",
       information: {
         imageKey1: "",
-        imageKey2: ""
+        imageKey2: "",
+         input: "",
+
       },
       imgUrl: "",
       imgUrl2: "",
       rules: {
+        input: [{ required: true, message: "请上输入文字", trigger: "blur" }],
         imageKey1: [{ required: true, message: "请上传图片", trigger: "blur" }],
         imageKey2: [{ required: true, message: "请上传图片", trigger: "blur" }]
       },
-      loading2: false
+      loading2: true
     };
   },
   mounted() {
@@ -88,16 +91,18 @@ export default {
       let url = CONSTANT.CATEGORY.DETAIL + `?id=${this.id}`;
       common.postNoSess(url, null, null, res => {
         let data = res.data;
-        console.log(data.bussData);
-        this.input = data.bussData.name;
+        this.information= data.bussData;
+        this.information.input = data.bussData.name;
+        console.log(this.information.input);
         this.imgUrl = data.bussData.image1Link;
         this.imgUrl2 = data.bussData.image2Link;
+        this.loading2 = false
       });
     },
     // 确定保存
     submit(formName) {
       this.$refs[formName].validate(valid => {
-        console.log(this.input);
+        console.log(this.information.image1Key);
         if (valid) {
           this.loading = true;
           let url = "";
@@ -109,7 +114,7 @@ export default {
           let data = {
             image1Key: this.information.imageKey1,
             image2Key: this.information.imageKey2,
-            name: this.input
+            name: this.information.input
           };
           if (this.id) {
             data.id = this.id;
@@ -123,13 +128,11 @@ export default {
                 message: "保存成功!"
               });
               this.loading = false;
-              setTimeout(() => {
                 this.$router.push("/classify");
-              }, 2000);
             } else {
               this.$message({
                 type: "error",
-                message: res.data.errMsg
+                message: "请添加完成信息！"
               });
               this.loading = false;
             }

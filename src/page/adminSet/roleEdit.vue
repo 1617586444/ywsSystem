@@ -11,7 +11,7 @@
                 <el-form-item label="角色描述" prop="roleDescribe">
                     <el-input type="textarea" v-model="role.roleDescribe" placeholder="请输入角色描述" :rows="5" style="width:400px;"></el-input>
                 </el-form-item>
-                <el-form-item label="角色权限" prop="roleList">
+                <el-form-item label="角色权限" prop="checkedOrder">
                    <div class="access-list">
                       <!-- <div  v-for="(item,index) in role.roleList" :key="item.id" class="access-item">
                         <template>

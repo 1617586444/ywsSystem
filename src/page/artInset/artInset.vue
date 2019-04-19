@@ -1,7 +1,7 @@
 <template>
   <div class="contain"
   v-loading="loading"
-  element-loading-text="拼命上传中..."
+  element-loading-text="玩命加载中..."
   element-loading-spinner="el-icon-loading"
   >
     <div class="main">
