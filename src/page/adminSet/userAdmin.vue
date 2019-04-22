@@ -212,7 +212,7 @@ export default {
 
 </script>
 
-<style scope>
+<style scoped>
   .storeDisplay{
     height:620px;
     line-height: 20px;

@@ -38,7 +38,7 @@ Vue.http.interceptors.push(function(request, next) {//拦截器
     //401 登陆过期跳转
     // console.log(res);
     if(res.body.status == 401 || !sessionStorage.getItem('sessionId')){
-        // router.push("/loginPage");
+        router.push("/loginPage");
     }
   })
 })

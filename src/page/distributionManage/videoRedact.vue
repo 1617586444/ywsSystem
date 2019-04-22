@@ -18,7 +18,7 @@
       <el-input class="put" v-model="input" placeholder="黑客帝国删减版part2"></el-input>
 
     </div>
-    <div class="show">
+    <div class="show-video">
       <span>是否展示</span>
       <el-select v-model="value" placeholder="否">
         <el-option
@@ -29,33 +29,33 @@
         </el-option>
      </el-select>
     </div>
-    <div class="videoShow show">
+    <div class="videoShow show-video">
       <span>视频预览</span>
-      <el-form-item prop="videoKey">
+      <el-form-item label="" prop="videoKey">
         <el-upload
           class="upload-demo upVideo"
           :action="upLoadUrl"
           :before-upload="beforeAvatarUpload"
           :file-list="fileList"
           >
-          <el-button size="small" type="primary">点击更换视频</el-button>
+          <el-button class="endit-vid" size="small" type="primary">{{id ? '点击更换视频' : '点击新增视频'}}</el-button>
         </el-upload>
       </el-form-item>
     </div>
     <div class="viewWindos">
-      <el-form-item prop="imageKey">
-          <el-upload class="avatar-uploader"
+      <el-form-item prop="imageKey" >
+          <el-upload class="avatar-uploader" style="margin-left:0;"
               :action="upLoadUrl"
               :show-file-list="false"
               :before-upload="beforeAvatarUpload2">
               <img v-if="imgUrl" :src="imgUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <i v-else class="el-icon-plus avatar-uploader-icon">视频首页图</i>
           </el-upload>
       </el-form-item>
     </div>
      <el-form-item>
     <div class="qued">
-      <el-button class="but" type="primary"
+      <el-button type="primary"
       @click="submit('information')"
       >确定</el-button>
     </div>
@@ -220,7 +220,7 @@ let common = require("../../common.js");
   }
 </script>
 
-<style scope>
+<style scoped lang="scss">
 #upDate{
   width:100%;
   height:100%;
@@ -230,7 +230,7 @@ let common = require("../../common.js");
   font-family: Microsoft Yahei;
 }
 .viewWindos{
-  margin-top: 80px;
+  margin-top: 40px;
   width: 328px;
   height: 180px;
   line-height: 41px;
@@ -240,6 +240,9 @@ let common = require("../../common.js");
   font-family: Roboto;
   border: 1px solid rgba(187, 187, 187, 1);
   margin-left: 250px;
+  .el-form-item__content{
+     margin-left: 0;
+  }
 }
 .viewWindos .el-form-item__content, .avatar-uploader{
   height: 100%;
@@ -248,6 +251,8 @@ let common = require("../../common.js");
 .avatar-uploader>div>i{
   width: 328px;
   height:180px;
+  text-align: center;
+  line-height:180px;
 }
 .avatar{
   width: 328px;
@@ -289,20 +294,21 @@ let common = require("../../common.js");
     width:180px;
     margin-top:18px;
   }
-
-  .show{
+  .endit-vid{
+    margin-top:30px;
+  }
+  .show-video{
+    line-height:100px;
     margin-top:20px;
     padding-left:164px;
   }
-  .show>span{
+  .show-video>span{
     margin-right:30px;
     float: left;
   }
-  .but{
-    display: block;
-    margin:40px auto;
-  }
   .qued{
+    line-height:160px;
+    text-align: center;
     padding-bottom:60px;
   }
 </style>

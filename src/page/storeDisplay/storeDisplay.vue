@@ -126,7 +126,6 @@ export default {
     noVal(){
       if(this.search == ''){
       this.getList()
-
       }
     },
     // 门店搜索
@@ -270,12 +269,13 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped lang="scss">
 .storeDisplay {
   line-height: 20px;
   border: 1px solid rgba(187, 187, 187, 1);
   padding: 0 10px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 .el-input__inner {
   height: 28px !important;
@@ -289,17 +289,20 @@ export default {
   line-height: 50px;
   border: 1px solid rgba(187, 187, 187, 1);
 }
-.topInfo > span {
-  color: rgba(16, 16, 16, 1);
-  font-size: 14px;
-  text-align: left;
-  font-family: SourceHanSansSC-regular;
-  padding: 0 30px;
+.topInfo{
+  span {
+    color: rgba(16, 16, 16, 1);
+    font-size: 14px;
+    text-align: left;
+    font-family: SourceHanSansSC-regular;
+    padding: 0 30px;
+  }
 }
 .el-input--mini {
   width: 120px;
 }
 .main-buttom {
+   overflow-y: auto;
   width: 100%;
   border: 1px solid rgba(187, 187, 187, 1);
   margin-top: 10px;

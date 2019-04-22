@@ -13,7 +13,7 @@
     </p>
     <div class="addressInfo">
       <el-form-item prop="content">
-      <div class="province" >
+      <div class="province-add" >
         <span>省份</span>
         <el-select size="small" style="width: 100px"
         v-model="selectProv"
@@ -27,7 +27,7 @@
       </el-select>
       </div>
       </el-form-item>
-      <div class="city">
+      <div class="city-add">
         <span>城市</span>
         <el-select size="small" style="width: 100px"
             :disabled="selectProv ? false : true"
@@ -116,7 +116,6 @@ export default {
       this.citys = tempCity;
     },
     getCity(city) {
-//       console.log(this.selectCity)
       this.city = this.selectCity;
      }, 
     // 确定提交
@@ -141,14 +140,12 @@ export default {
                 type: 'success',
                 message: '保存成功!'
             });
-            setTimeout(() =>{
               this.$router.push('/storeDisplay')
-            },1500)
             this.loading2 = false;
         } else {
             this.$message({
                 type: 'error',
-                message: res.data.errMsg
+                message: "信息不完整！"
             });
             this.loading2 = false;
           }
@@ -158,17 +155,17 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
   .addressInfo{
     padding:100px 0 0 250px;
   }
-  .province{
+  .province-add{
     padding-bottom:38px;
   }
-  .province>span{
+  .province-add>span{
     padding-right:68px;
   }
-  .city>span{
+  .city-add>span{
     padding-right:68px;
   }
   .definiteAddress>sapn{

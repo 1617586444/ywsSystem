@@ -22,12 +22,12 @@
           :action="upLoadUrl"
           :show-file-list="false"
           :before-upload="beforeAvatarUpload2">
-          <img width="120" height="180" v-if="imgUrl" :src="imgUrl" class="avatar">
+          <img width="120" height="160" v-if="imgUrl" :src="imgUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
     </div>
-    <div class="show">
+    <div class="show-banner">
       <span>是否展示</span>
       <el-select v-model="value" placeholder="否">
         <el-option
@@ -39,7 +39,7 @@
       </el-select>
     </div>
     <div class="qued">
-      <el-button  class="but" type="primary"  @click="submit('information')">确定</el-button>
+      <el-button  class="but-banner" type="primary"  @click="submit('information')">确定</el-button>
     </div>
     </el-form>
   </div>
@@ -175,7 +175,7 @@ let common = require("../../common.js");
   }
 </script>
 
-<style scope>
+<style scoped>
 #upDate {
   width: 100%;
   height: 100%;
@@ -183,6 +183,9 @@ let common = require("../../common.js");
   color: rgba(16, 16, 16, 1);
   font-size: 16px;
   font-family: Microsoft Yahei;
+}
+.avatar-uploader{
+  line-height:160px;
 }
 .pageSwiper {
   padding-top: 60px;
@@ -193,9 +196,17 @@ let common = require("../../common.js");
   font-family: PingFangSC-regular;
 }
 .swiper-img {
-  height: 120px;
+  height: 160px;
   padding-left: 164px;
   margin-top: 80px;
+  line-height: 160px;
+}
+.avatar-uploader-icon{
+  border:1px dotted #ccc;
+  width:120px;
+  height:160px;
+  text-align: center;
+  line-height: 160px;
 }
 .swiper-img > span {
   display: block;
@@ -203,24 +214,18 @@ let common = require("../../common.js");
   padding-right: 64px;
   line-height: 120px;
 }
-.swiper-img > img {
-  width: 200px;
-  height: 120px;
-  float: left;
-  margin-right: 30px;
-}
-.el-button {
+/* .el-button {
   margin-top: 50px;
-}
-.show {
-  margin-top: 61px;
+} */
+.show-banner {
+  padding-top: 61px;
   padding-left: 164px;
   padding-bottom: 113px;
 }
-.show > span {
+.show-banner > span {
   margin-right: 30px;
 }
-.but {
+.but-banner {
   display: block;
   margin: 0 auto;
 }

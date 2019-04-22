@@ -54,10 +54,10 @@ let common = require("@/common.js");
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
-        if (value === '') {
+        if (this.user.passwd === '') {
             callback(new Error('请再次输入密码'));
         }
-        else if (value !== this.user.passwd) {
+        else if (this.user.confirmPasswd !== this.user.passwd) {
             callback(new Error('两次输入密码不一致!'));
         }
         else {
@@ -101,7 +101,7 @@ export default {
           ],
           confirmPasswd: [
               { required: true, message: '请确认密码', trigger: 'blur' },
-              { min: 6, max:18, message: '长度在 6 到 18 个字符', trigger: 'blur' }
+              { validator: validatePass, trigger: 'blur' }
           ],
           passwd: [
               { required: true, message: '请输入密码', trigger: 'blur' },
@@ -168,6 +168,7 @@ export default {
       },
       // 切换下拉角色
       getRoleId(e){
+        console.log(this.user.passwd);
           this.user.roleId = e;
           console.log(e);
           this.getUserById()

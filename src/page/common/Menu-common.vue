@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 body{
   margin: 0;
   padding: 0;

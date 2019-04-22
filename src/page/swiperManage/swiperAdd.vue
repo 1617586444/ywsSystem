@@ -168,7 +168,7 @@ let common = require("../../common.js");
   }
 </script>
 
-<style scope>
+<style scoped>
 #upDate {
   width: 100%;
   height: 100%;
@@ -202,9 +202,9 @@ let common = require("../../common.js");
   float: left;
   margin-right: 30px;
 }
-.el-button {
+/* .el-button {
   margin-top: 50px;
-}
+} */
 .show {
   margin-top: 51px;
   padding-left: 164px;

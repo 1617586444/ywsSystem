@@ -13,18 +13,6 @@
                 </el-form-item>
                 <el-form-item label="角色权限" prop="checkedOrder">
                    <div class="access-list">
-                      <!-- <div  v-for="(item,index) in role.roleList" :key="item.id" class="access-item">
-                        <template>
-                          <el-checkbox v-model="item.checkAll" :indeterminate="item.isIndeterminate" @change="roleChange(index)"  :label="item.id" :key="item.id">{{item.menuName}}</el-checkbox>
-                          <el-checkbox-group v-model="role.checkedOrder" style="margin-left: 20px;">
-                            <el-checkbox v-for="(list,num) in item.subMenus" @change="roleListChange(index,num)" :label="list.id" :key="list.id">{{list.menuName}}
-                            <el-checkbox v-for="(point,i) in list.subMenus" @change="pointListChange(index,num,i)" :label="point.id" :key="point.id">{{point.menuName}}</el-checkbox>
-                            </el-checkbox>
-
-                          </el-checkbox-group>
-
-                        </template>
-                      </div> -->
                       <el-tree
                       :data="roleDescribeLis"
                       show-checkbox
@@ -97,7 +85,7 @@ export default {
             this.$router.go(-1);
         },
         getDetailById(){
-          console.log('进来了');
+          // console.log('进来了');
             let url = CONSTANT.ROLE.DETAIL+`?id=${this.id}`;
             common.postNoSess(url,null,null,(res)=>{
               if(res.status == 'success'){
@@ -110,15 +98,17 @@ export default {
                         array.push(e);
                     });
                     this.checkedList = array;
+                    this.role.checkedOrder = array;
                       console.log(  this.checkedList);
+
                     this.getList();
                 }
             })
         },
         fd(){
             this.role.checkedOrder=this.$refs.tree.getCheckedKeys()
-            console.log(this.$refs.tree.getCheckedKeys());
-            console.log(this.role.checkedOrder);
+            // console.log(this.$refs.tree.getCheckedKeys());
+            // console.log(this.role.checkedOrder);
         },
         getList(){
             let url = CONSTANT.AUTHOR.GETLIST;
@@ -126,7 +116,7 @@ export default {
             let param = JSON.stringify(data);
             common.postNoSess(url,param,null,(res)=>{
                 let data = res.data.bussData;
-                console.log(data,'数据');
+                // console.log(data,'数据');
                 data.forEach((item)=>{
                     let status = false,
                         num = 0;
@@ -145,13 +135,12 @@ export default {
         },
         handleSave(formName){
             this.$refs[formName].validate((valid) => {
-              // valid = true
                 if (valid) {
                     let url = null,
                     data,param;
                     if(this.id){
                       //  this.role.checkedOrder = [];
-                      console.log(this.role.checkedOrder);
+                      // console.log(this.role.checkedOrder);
                         url = CONSTANT.ROLE.UPDATE
                         this.role.checkedOrder.forEach((item)=>{
                             item = parseInt(item)
@@ -195,7 +184,7 @@ export default {
                 }
             });
         },
-        roleChange(index){
+        /* roleChange(index){
             let arr = this.role.roleList[index].menuIds,
                 id = this.role.roleList[index].id;
                 this.idList.push(this.role.roleList[index].id);
@@ -221,8 +210,8 @@ export default {
                         })
                     }
                 })
-        },
-        roleListChange(index,num){
+        }, */
+        /* roleListChange(index,num){
             let objArr = this.role.roleList[index].subMenus,
                  obj = objArr[num];
                  console.log('第二层',this.role.roleList[index],obj,objArr);
@@ -266,8 +255,8 @@ export default {
                         }
                     })
                 }
-        },
-        pointListChange(index,num,i){
+        }, */
+        /* pointListChange(index,num,i){
             let objArr = this.role.roleList[index].subMenus,
             obj = objArr[num];
             this.role.checkedOrder.find((item,index)=>{
@@ -311,7 +300,7 @@ export default {
                     })
                 }
 
-        },
+        }, */
     },
 
 }
@@ -321,6 +310,9 @@ export default {
         color: #000;
         background: #fff !important;
         border: 1px solid #dcdfe6 !important;
+    }
+    .el-form-item__label{
+      height: 300px!important;
     }
 </style>
 

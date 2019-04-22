@@ -59,7 +59,7 @@ export default {
       },
       onEditorChange(e){//内容改变事件
         this.information.content = e.html;
-        console.log(e.html);
+        // console.log(e.html);
       },
       // 获取数据
       getDetail(){

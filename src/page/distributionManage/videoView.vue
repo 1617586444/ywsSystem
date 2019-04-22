@@ -56,7 +56,7 @@ let common = require("../../common.js");
   }
 </script>
 
-<style scope>
+<style scoped>
 #upDate{
   width:100%;
   height:100%;

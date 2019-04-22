@@ -44,7 +44,7 @@
               type="warning"
               size="mini"
               @click="showUpdata(scope.row.id)"
-            >{{scope.row.enable ? '显示' : '隐藏'}}</el-button>
+            >{{scope.row.enable ? '隐藏' : '显示'}}</el-button>
           </template>
         </el-table-column>
       </el-table>

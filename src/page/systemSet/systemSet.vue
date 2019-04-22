@@ -19,7 +19,7 @@
             :show-file-list="false"
             :before-upload="beforeAvatarUpload"
           >
-            <img width="120" height="80" v-if="imgUrl" :src="imgUrl" class="avatar">
+            <img width="120" height="80" v-if="imgUrl" :src="imgUrl" class="avatar-sys">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </div>
@@ -31,12 +31,12 @@
               :show-file-list="false"
               :before-upload="beforeAvatarUpload2"
             >
-            <img width="120" height="80" v-if="imgUrl2" :src="imgUrl2" class="avatar">
+            <img width="120" height="80" v-if="imgUrl2" :src="imgUrl2" class="avatar-sys">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </div>
         <div class="linkto">
-          <el-input v-model="link" v-on:blur="handleVal" class="but" size="mini" placeholder="https://list.tmall.com/search_product.htm?q=%D2%C1%CE%AC%CB%B9&type=p&vmarket=&spm=875.7931836%2FB.a2227oh.d100&from=mallfp..pc_1_searchbutton"></el-input>
+          <el-input v-model="link" v-on:blur="handleVal" class="but-sys" size="mini" placeholder="https://list.tmall.com/search_product.htm?q=%D2%C1%CE%AC%CB%B9&type=p&vmarket=&spm=875.7931836%2FB.a2227oh.d100&from=mallfp..pc_1_searchbutton"></el-input>
           <span>跳转链接</span>
         </div>
         <div class="contactMe">
@@ -66,7 +66,7 @@
             :show-file-list="false"
             :before-upload="beforeAvatarUpload3"
           >
-            <img  width="120" height="80" v-if="imgUrl3" :src="imgUrl3" class="avatar">
+            <img  width="120" height="80" v-if="imgUrl3" :src="imgUrl3" class="avatar-sys">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -95,7 +95,7 @@
               :show-file-list="false"
               :before-upload="beforeAvatarUpload5"
             >
-              <img  width="120" height="80" v-if="imgUrlModel" :src="imgUrlModel" class="avatar">
+              <img  width="120" height="80" v-if="imgUrlModel" :src="imgUrlModel" class="avatar-sys">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             </li>
@@ -107,7 +107,7 @@
               :show-file-list="false"
               :before-upload="beforeAvatarUpload6"
             >
-              <img  width="120" height="80" v-if="imgUrlModel2" :src="imgUrlModel2" class="avatar">
+              <img  width="120" height="80" v-if="imgUrlModel2" :src="imgUrlModel2" class="avatar-sys">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             </li>
@@ -119,7 +119,7 @@
                 :show-file-list="false"
                 :before-upload="beforeAvatarUpload7"
               >
-                <img  width="120" height="80" v-if="imgUrlModel3" :src="imgUrlModel3" class="avatar">
+                <img  width="120" height="80" v-if="imgUrlModel3" :src="imgUrlModel3" class="avatar-sys">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </li>
@@ -131,7 +131,7 @@
                 :show-file-list="false"
                 :before-upload="beforeAvatarUpload8"
               >
-                <img  width="120" height="80" v-if="imgUrlModel4" :src="imgUrlModel4" class="avatar">
+                <img  width="120" height="80" v-if="imgUrlModel4" :src="imgUrlModel4" class="avatar-sys">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </li>
@@ -143,7 +143,7 @@
                 :show-file-list="false"
                 :before-upload="beforeAvatarUpload9"
               >
-                <img  width="120" height="80" v-if="imgUrlModel5" :src="imgUrlModel5" class="avatar">
+                <img  width="120" height="80" v-if="imgUrlModel5" :src="imgUrlModel5" class="avatar-sys">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </li>
@@ -157,7 +157,7 @@
             :show-file-list="false"
             :before-upload="beforeAvatarUpload10"
           >
-            <img  width="120" height="80" v-if="imgUrlShop" :src="imgUrlShop" class="avatar">
+            <img  width="120" height="80" v-if="imgUrlShop" :src="imgUrlShop" class="avatar-sys">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </div>
@@ -618,7 +618,7 @@ let common = require("../../common.js");
   }
 </script>
 
-<style scope>
+<style scoped>
   .imgText{
     display: flex;
     height: 608px;
@@ -646,11 +646,11 @@ let common = require("../../common.js");
     float: right;
     padding-top:40px;
   }
-  .but{
+  .but-sys{
     width: 200px;
     padding-top:40px;
     margin-left:10px;
-    margin-right:10px;
+    margin-right:15%;
     float: right;
   }
   .but2{

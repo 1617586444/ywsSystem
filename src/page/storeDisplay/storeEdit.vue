@@ -104,12 +104,26 @@ export default {
         console.log(data);
         this.address = data.bussData.address;
         this.selectCity = data.bussData.city;
-        // this.city = data.bussData.city;
-        // this.province = data.bussData.province;
+        this.city = data.bussData.city;
+        this.province = data.bussData.province;
         this.selectProv = data.bussData.province;
         this.phone = data.bussData.phone;
         this.shopName = data.bussData.shopName;
+        for(var peov of PROVIN){
+          // console.log(peov.value);
+          if(peov.value ==  this.selectProv){
+            console.log(peov.value);
+              for (var val of PROVIN2){
+              if (peov.value == val.prov){
+              // 省份接口
+              this.province = val.prov;
+              this.citys.push({label: val.label, value: val.label})
+              }
+            }
+          }
+        }
       });
+        // console.log(PROVIN);
     },
     // 确定保存
     submit(formName) {
@@ -180,7 +194,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
   .addressInfo{
     padding:100px 0 0 250px;
   }

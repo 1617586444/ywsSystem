@@ -66,7 +66,7 @@ export default {
           let param = JSON.stringify(dataForm);
           this.loading = true;
           common.postNoSess(url,param,null,(res)=>{
-            console.log(res);
+            // console.log(res);
               this.loading = false;
               let data = res.data;
               this.tableData = data.bussData;

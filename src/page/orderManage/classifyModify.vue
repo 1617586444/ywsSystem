@@ -65,15 +65,15 @@ export default {
       information: {
         imageKey1: "",
         imageKey2: "",
-         input: "",
+        input: "",
 
       },
       imgUrl: "",
       imgUrl2: "",
       rules: {
         input: [{ required: true, message: "请上输入文字", trigger: "blur" }],
-        imageKey1: [{ required: true, message: "请上传图片", trigger: "blur" }],
-        imageKey2: [{ required: true, message: "请上传图片", trigger: "blur" }]
+        // imageKey1: [{ required: true, message: "请上传图片", trigger: "blur" }],
+        // imageKey2: [{ required: true, message: "请上传图片", trigger: "blur" }]
       },
       loading2: true
     };
@@ -91,9 +91,9 @@ export default {
       let url = CONSTANT.CATEGORY.DETAIL + `?id=${this.id}`;
       common.postNoSess(url, null, null, res => {
         let data = res.data;
+        console.log(data);
         this.information= data.bussData;
         this.information.input = data.bussData.name;
-        console.log(this.information.input);
         this.imgUrl = data.bussData.image1Link;
         this.imgUrl2 = data.bussData.image2Link;
         this.loading2 = false
@@ -203,7 +203,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .classifyModf {
   padding: 100px 0 0 100px;
 }
@@ -218,11 +218,6 @@ export default {
 .put {
   float: left;
   width: 180px;
-}
-.el-upload > img {
-  width: 210px;
-  height: 180px;
-  margin-top: -50px;
 }
 .avatar-uploader {
   float: left;

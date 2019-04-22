@@ -70,7 +70,9 @@ a{text-decoration: none !important;}
     }
   }
 }
-
+.el-form-item__content{
+  margin:0!important;
+}
 .note-editor.note-frame{
     width: 650px;
 }
